@@ -17,3 +17,10 @@ public
 !assets/public/.licence
 
 mariadb
+
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+npm-debug.log
+yarn-error.log
