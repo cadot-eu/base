@@ -1,0 +1,2 @@
+aa:
+  bb: "%kernel.project_dir%/templates"

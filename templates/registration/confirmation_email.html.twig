@@ -1,0 +1,13 @@
+<h1>{{t('Hi! Please confirm your email!')}}</h1>
+
+<p>
+	{{t('Please confirm your email address by clicking the following link:')}}
+	<br><br>
+	<a href="{{ signedUrl }}">{{t('Confirm my Email')}}</a>.
+	{{t('This link will expire in')}}
+	{{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}.
+</p>
+
+<p>
+	{{t('Cheers!')}}
+</p>

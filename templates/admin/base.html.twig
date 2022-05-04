@@ -1,0 +1,61 @@
+<html lang="fr">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="robots" content="noindex"/>
+		<meta name="Language" content="fr"/>
+		<meta name="title" content="administration"/>
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('admin') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('admin') }}
+		{% endblock %}
+	</head>
+	<body>
+		{% include "flash_message.html.twig" %}
+		{% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
+		{% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
+		{% if action=='' %}
+			{% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/') %}
+			{% set action = action[2] %}
+		{% endif %}
+		<nav class="navbar navbar-expand-md navbar-light fixed-top bg-white border-bottom">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/admin">Administration</a>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarCollapse">
+					<ul class="navbar-nav me-auto mb-2 mb-md-0">
+						<li class="nav-item">
+							<a class="nav-link {{ action== '' ? 'active' }}" href="{{path('home_index')}}" target="_blank">Le site</a>
+						</li>
+						{% if app.user and app.user.isVerified %}
+
+
+							{% set parties = ['parametres','compte','categorie','article','carousel'] %}
+							{% for partie in parties %}
+								<li class="nav-item">
+									<a class="nav-link  {{ action== partie ? 'active' }}" href="{{path(partie~'_index')}}">{{partie|capitalize}}</a>
+								</li>
+							{% endfor %}
+
+						{% endif %}
+					</ul>
+					<ul class="navbar-nav ms-auto mb-2 mb-md-0">
+						<li class="nav-item">
+							<a class="nav-link" href="{{path('app_logout')}}">Déconnexion</a>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+		</nav>
+		<div class="container" style=" min-height: 75rem;padding-top: 4.5rem;"> {% block body %}{% endblock %}
+			</div>
+		</body>
+	</html>

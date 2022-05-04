@@ -1,0 +1,188 @@
+{# Here for add your Code #}
+{# End of your Code #}{% extends 'admin/base.html.twig' %}
+{% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
+{% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
+{# Here for add your Code #}
+{# End of your Code #}
+{% block title %}
+	Parametres
+{% endblock %}
+
+{% block body %}
+
+	{# Here for add your Code #}
+	{# End of your Code #}
+	
+	<h1>Parametres</h1>
+	{# Here for add your Code #}
+	{# End of your Code #}
+	<div>
+		<table class="table table-responsive table-striped table-hover align-middle">
+			<thead>
+				<tr>
+					{# Here for add your Code #}
+					{# End of your Code #}
+					
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == 'nom' ? 'active' }} " 
+                    href='?tri=nom&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>nom</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == 'valeur' ? 'active' }} " 
+                    href='?tri=valeur&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>valeur</a></th>{%if action=="deleted" %}<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == 'deletedAt' ? 'active' }} " 
+                    href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a></th>{% endif %}
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == 'createdAt' ? 'active' }} " 
+                    href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == 'updatedAt' ? 'active' }} " 
+                    href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a></th>
+					{# Here for add your Code #}
+					{# End of your Code #}
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody class="sortable">
+				{% for Parametres in parametress %}
+					{% if true  %}
+						<tr
+							data-num="{{Parametres.id }}">
+							{# Here for add your Code #}
+						{# End of your Code #}
+							
+<td ><p class='my-auto' title='{{Parametres.nom}}' >{{ Parametres.nom}}</p></td>
+
+<td >{{ Parametres.valeur|striptags|u.truncate(20, '...')}}</td>
+
+{%if action=="deleted" %}<td>{{ Parametres.deletedAt is not empty ? Parametres.deletedAt|date('d/m à H:i', 'Europe/Paris')}}</td>{% endif %}
+
+<td>{{ Parametres.createdAt is not empty ? Parametres.createdAt|date('d/m à H:i', 'Europe/Paris')}}</td>
+
+<td>{{ Parametres.updatedAt is not empty ? Parametres.updatedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
+
+							{# Here for add your Code #}
+						{# End of your Code #}
+							<td>
+								{# Here for add your Code #}
+							{# End of your Code #}
+								<form method="post" action="{{ path('parametres_delete', {'id': Parametres.id }) }}" style="margin-block-end: 0;">
+									<div
+										class="btn-group" role="group" aria-label="actions">
+										{# Here for add your Code #}
+									{# End of your Code #}
+										<input type="hidden" name="_token" value="{{ csrf_token('delete'~Parametres.id ) }}"/>
+										
+                    <a class='btn btn-xs btn-primary'  title='edit' href="{{ path('parametres_edit', {'id': Parametres.id }) }}">
+                        <i class='icone icone bi bi-pencil-square'></i>
+                    </a>
+										{# Here for add your Code #}
+									{# End of your Code #}
+										{% if false %}
+											{% if action=='deleted' %}
+												{# Here for add your Code #}
+											{# End of your Code #}
+												<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore" value="1">
+													<i class="icone bi bi-life-preserver"></i>
+												</button>
+												<button class="btn btn-xs btn-danger" title="supprimer définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');" name="delete_delete" value="1">
+													<i class="icone bi bi-trash"></i>
+												</button>
+											{% else %}
+												{# Here for add your Code #}
+											{# End of your Code #}
+												<button class="btn btn-xs btn-warning" title="mettre dans la corbeille" name="delete_softdelete" value="1">
+													<i class="icone icone bi bi-trash"></i>
+												</button>
+											{% endif %}
+										{% endif %}
+
+										{# Here for add your Code #}
+									{# End of your Code #}
+
+
+									</div>
+								</form>
+								{# Here for add your Code #}
+							{# End of your Code #}
+							</td>
+						</tr>
+					{% endif %}
+				{% else %}
+					<tr>
+						<td colspan="11">Aucun enregistrement</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	{# Here for add your Code #}
+	{# End of your Code #}
+	<div class="row">
+		{% if false %}
+			<div class="col">
+				<a class="btn btn-primary" data-toggle="tooltip" title="ajouter enregistrement" href="{{ path('parametres_new') }}">Ajouter un enregistrement</a>
+			</div>
+		{% endif %}
+		{% if false %}
+			{% if action=='deleted' %}
+				<div class="col-auto">
+					<a class="text-muted" href="{{ path('parametres_index') }}">voir les enregistrements</a>
+				</div>
+			{% else %}
+				<div class="col-auto">
+					<a class="text-muted" href="{{ path('parametres_deleted') }}">voir les enregistrements supprimés</a>
+				</div>
+			{% endif %}
+		{% endif %}
+	</div>
+	{# Here for add your Code #}
+	{# End of your Code #}
+
+
+	<nav aria-label="Page navigation ">
+		<ul
+			class="pagination justify-content-center">
+			{# precedent #}
+			<li class="page-item {{ app.request.query.get('page')==1 or app.request.query.get('page')==0 ? 'disabled' }} ">
+				{% if app.request.query.get('page') is defined and app.request.query.get('page')>1 %}
+					{% set precedent = app.request.query.get('page') -1 %}
+				{% else %}
+					{% set precedent = 1 %}
+				{% endif %}
+				<a class="page-link" href="{{ path('parametres_index',{'page':precedent,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			{% if pagesMaxi/10>6 %}
+				{# 1 #}
+				<li class="page-item">
+					<a class="page-link" href="{{ path('parametres_index',{'page':1,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">1</a>
+				</li>
+				{# pages millieu #}
+				{% for item in 1..5 %}
+					<li class="page-item">
+						<a class="page-link " href="{{ path('parametres_index',{'page':(pagesMaxi/10/6*loop.index)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{(pagesMaxi/10/6*loop.index)|number_format(0)}}</a>
+					</li>
+				{% endfor %}
+				{# maxi #}
+				<li class="page-item">
+					<a class="page-link" href={{ path('parametres_index',{'page':(pagesMaxi/10)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')} ) }}>{{(pagesMaxi/10)|number_format(0)}}</a>
+				</li>
+			{% else %}
+				{% set maxi=(pagesMaxi/10)|number_format(0) %}
+
+				{% for item in 1..(maxi==0?1:maxi) %}
+					<li class="page-item">
+						<a class="page-link " href="{{ path('parametres_index',{'page':loop.index,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{loop.index}}</a>
+					</li>
+				{% endfor %}
+			{% endif %}
+			{# suivant #}
+			<li class="page-item {{ app.request.query.get('page') >= (pagesMaxi/10)|number_format ? 'disabled' }}">
+				{% if app.request.query.get('page')==0 %}
+					{% set suivant = 2 %}
+				{% else %}
+					{% set suivant = app.request.query.get('page') +1 %}
+				{% endif %}
+				<a class="page-link" href="{{ path('parametres_index',{'page':suivant,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+{%endblock %}

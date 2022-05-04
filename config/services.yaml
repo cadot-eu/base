@@ -1,0 +1,52 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: "../src/"
+        exclude:
+            - "../src/DependencyInjection/"
+            - "../src/Entity/"
+            - "../src/Kernel.php"
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones
+    app.filter.all_filter:
+        class: App\Imagine\Filter\Loader\AllImagineFilter
+        tags:
+            - { name: "liip_imagine.filter.loader", loader: "allfilter" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudInitCommand:
+        tags:
+            - { name: "console.command", command: "crud:init" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudMakeTypeCommand:
+        tags:
+            - { name: "console.command", command: "crud:generate:type" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudMakeNewCommand:
+        tags:
+            - { name: "console.command", command: "crud:generate:new" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudMakeControllerCommand:
+        tags:
+            - { name: "console.command", command: "crud:generate:controller" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudMakeIndexCommand:
+        tags:
+            - { name: "console.command", command: "crud:generate:index" }
+
+    Cadoteu\EntityToFormBundle\Command\CrudGenerateAllCommand:
+        tags:
+            - { name: "console.command", command: "crud:generate" }

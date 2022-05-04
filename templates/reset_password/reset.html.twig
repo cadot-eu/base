@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{t('Reset your password')}}
+{% endblock %}
+
+{% block body %}
+	<div class="col-lg-6 col-12 mx-auto">
+		<h1>{{t('Reset your password')}}</h1>
+
+		{{ form_start(resetForm) }}
+		{{ form_row(resetForm.plainPassword) }}
+		<button class="btn btn-primary">{{t('Reset password')}}</button>
+		{{ form_end(resetForm) }}
+	</div>
+{% endblock %}
