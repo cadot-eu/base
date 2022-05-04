@@ -16,119 +16,51 @@ class AllExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            /* ------------------------- functions editeur tmce ------------------------- */
-            new TwigFunction('TBtmcerender', [
-                $this, 'tmcerender', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBtmcefirstImage', [
-                $this, 'tmcefirstImage', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBtmcefirstHeader', [
-                $this, 'tmcefirstHeader', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBtmcefirstText', [
-                $this, 'tmcefirstText', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            /* ----------------------- ancien créateur de template ---------------------- */
-            new TwigFunction('TBformrow', [$this, 'formrow'], [
-                'is_safe' => ['html'],
-            ]),
-            new TwigFunction('TBformcol', [$this, 'formcol'], [
-                'is_safe' => ['html'],
-            ]),
-            new TwigFunction('TBformend', [$this, 'formend'], [
-                'is_safe' => ['html'],
-            ]),
-            /* ---------------- inplementation de functions du repository --------------- */
-            new TwigFunction('TBfindall', [$this, 'findall']),
-            new TwigFunction('TBfind', [$this, 'find']),
-            new TwigFunction('TBfindOneBy', [$this, 'findOneBy']),
-            new TwigFunction('TBfindBy', [$this, 'findBy']),
+
             /* --------------------- implementation de functions php -------------------- */
-            new TwigFunction('TBreorder', [$this, 'reorder']),
             new TwigFunction('TBdd', [$this, 'dd']),
             new TwigFunction('TBgetenv', [$this, 'getenv']),
             /* -------------------------- functions d'affichage ------------------------- */
             new TwigFunction('TBdatefr', [$this, 'datefr']),
-            new TwigFunction('TBimg', [$this, 'img'], [
-                'is_safe' => ['html'],
-            ]),
-            new TwigFunction('TBthumbnail', [$this, 'thumbnail'], [
-                'is_safe' => ['html'],
-            ]),
-            new TwigFunction('TBgetico', [
-                $this, 'getico', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
             new TwigFunction('TBuploadmax', [
                 $this, 'max', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             new TwigFunction('TBgetPublic', [$this, 'TBgetPublic']), // return a clean file for public access
             new TwigFunction('TBgetFilename', [$this, 'TBgetFilename']),
             new TwigFunction('TBimgToBase64', [
                 $this, 'TBimgToBase64', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
-            /* ---------------------------- function ckeditor --------------------------- */
-            new TwigFunction('TBckintro', [
-                $this, 'ckintro', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            /* -------------------------- functions editeur ejs ------------------------- */
-            new TwigFunction('TBejsrender', [
-                $this, 'ejsrender', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBejsfirstImage', [
-                $this, 'ejsfirstImage', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBejsfirstHeader', [
-                $this, 'ejsfirstHeader', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
-            new TwigFunction('TBejsfirstText', [
-                $this, 'ejsfirstText', [
-                    'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             /* ----------------------------- other-fonctions ----------------------------- */
             new TwigFunction('TBjsondecode', [
                 $this, 'jsondecode', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             new TwigFunction('TBfaker', [
                 $this, 'faker', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             new TwigFunction('TBfakeren', [
                 $this, 'fakeren', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             new TwigFunction('TBfakericon', [
                 $this, 'fakericon', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
 
         ];
     }
@@ -142,120 +74,21 @@ class AllExtension extends AbstractExtension
             new TwigFilter('TBjsonpretty', [
                 $this, 'jsonpretty', [
                     'is_safe' => ['html'],
-                    
-                ], ]),
+
+                ],
+            ]),
             /* -------------------------------- ckeditor -------------------------------- */
             new TwigFilter('TBckclean', [
                 $this, 'ckclean', [
-                    'is_safe' => ['html',
+                    'is_safe' => [
+                        'html',
                     ],
-                    
-                ], ]),
+
+                ],
+            ]),
         ];
     }
 
-    /* -------------------------------------------------------------------------- */
-    /*                            function editeur tmce                           */
-    /* -------------------------------------------------------------------------- */
-    public function tmcerender($texte)
-    {
-        return $texte;
-        //ajout des finctionnalitées propre à mickcrud
-        //travaille sur les images en ajoutant un filtre liip
-    }
-
-    public function tmcefirstImage($texte)
-    {
-        $htmlDom = new DOMDocument();
-        @$htmlDom->loadHTML($texte);
-        $img = $htmlDom->getElementsByTagName('img')[0];
-        if ($this->roles != null or substr(html_entity_decode($value->data->caption), 0, 2) != '¤') {
-            return $img->getAttribute('src');
-        }
-    }
-
-    public function tmcefirstHeader($json)
-    {
-        return 'à faire';
-    }
-
-    public function tmcefirstText($texte)
-    {
-        //dump($texte);
-        $pos = strpos($texte, '<!-- pagebreak -->');
-        if ($pos !== false) {
-            return strip_tags(substr($texte, 0, $pos));
-        } else {
-            return strip_tags($texte);
-        }
-    }
-
-    /* -------------------------------------------------------------------------- */
-    /*                         ancien createur de template                        */
-    /* -------------------------------------------------------------------------- */
-    public function formrow()
-    {
-        return ('<div class="row">');
-    }
-
-    public function formend()
-    {
-        return ('</div>');
-    }
-
-    public function formcol($value)
-    {
-        return '<div class="col-' . $value . '">';
-    }
-
-    /* -------------------------------------------------------------------------- */
-    /*                  inplementation de functions du repository                 */
-    /* -------------------------------------------------------------------------- */
-    /**
-     * Method findall
-     *
-     * @return array of entities
-     */
-    public function findall(string $repository)
-    {
-        return $this->em->getRepository("App:" . ucfirst($repository))->findall();
-    }
-
-    /**
-     * Method find
-     *
-     * @return array of entities
-     */
-    public function find(string $repository, int $id)
-    {
-        return $this->em->getRepository("App:" . ucfirst($repository))->find($id);
-    }
-
-    /**
-     * Method findOneBy
-     *
-     * @param array $orderBy
-     *
-     * @return entitie
-     */
-    public function findOneBy(string $repository, array $criteria, array $orderBy = null)
-    {
-        return $this->em->getRepository("" . ucfirst($repository))->findOneBy($criteria, $orderBy = null);
-    }
-
-    /**
-     * Method findBy
-     *
-     * @param array $orderBy
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return array of entities
-     */
-    public function findBy(string $repository, array $criteria, array $orderBy = null, $limit = null, $offset = null)
-    {
-        return $this->em->getRepository("App:" . ucfirst($repository))->findBy($criteria, $orderBy = null, $limit = null, $offset = null);
-    }
 
     /* -------------------------------------------------------------------------- */
     /*                       implementation de functions php                      */
@@ -350,7 +183,6 @@ class AllExtension extends AbstractExtension
         return json_decode($json);
         foreach (json_decode($json) as $key => $value) {
             $td = [];
-            // if (\is_object($value)) $value = (array)$value;
             foreach ($value as $k => $v) {
                 $td[] = "<b>$k</b>: $v";
             }
@@ -421,14 +253,14 @@ class AllExtension extends AbstractExtension
         $alt = str_replace('_', ' ', explode('.', end($tab))[0]);
         $alt = str_replace('-', "'", $alt);
         //si on a un tooltip
-        if (! $tooltip) {
+        if (!$tooltip) {
             $tooltip = $alt;
         } else {
             $alt = $tooltip;
         }
         //correction du répertoire
         if (isset($image)) {
-            if (! file_exists($image)) {
+            if (!file_exists($image)) {
                 if (file_exists('/app/public/' . $image)) {
                     $image = '/' . $image;
                 }
@@ -479,7 +311,7 @@ class AllExtension extends AbstractExtension
     public function getico($file, $taille = 32)
     {
         //pour prendre directement en public
-        if (! file_exists($file)) {
+        if (!file_exists($file)) {
             if (file_exists('/app/public' . $file)) {
                 $file = '/app/public' . $file;
             }
@@ -496,7 +328,7 @@ class AllExtension extends AbstractExtension
         $dom->load($adresse);
         $svg = $dom->documentElement;
 
-        if (! $svg->hasAttribute('viewBox')) { // viewBox is needed to establish
+        if (!$svg->hasAttribute('viewBox')) { // viewBox is needed to establish
             // userspace coordinates
             $pattern = '/^(\d*\.\d+|\d+)(px)?$/'; // positive number, px unit optional
 
@@ -692,7 +524,7 @@ class AllExtension extends AbstractExtension
         return json_decode($str, $arr);
     }
 
-    public function faker($type = 'text', $options = null)
+    static public function faker($type = 'text', $options = null)
     {
         $faker = Factory::create('fr_FR');
         if ($options) {
@@ -702,7 +534,7 @@ class AllExtension extends AbstractExtension
         }
     }
 
-    public function fakeren($type = 'text', $options = null)
+    static public function fakeren($type = 'text', $options = null)
     {
         $faker = Factory::create('fr_FR');
         if ($options) {
@@ -720,7 +552,7 @@ class AllExtension extends AbstractExtension
      *
      * @return An array of random icons.
      */
-    public function fakericon($complet = true)
+    static public function fakericon($complet = true)
     {
         $list = json_decode(file_get_contents(__DIR__ . '../gists/list.json'), true);
         if ($complet == false) {

@@ -26,27 +26,3 @@ services:
         class: App\Imagine\Filter\Loader\AllImagineFilter
         tags:
             - { name: "liip_imagine.filter.loader", loader: "allfilter" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudInitCommand:
-        tags:
-            - { name: "console.command", command: "crud:init" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudMakeTypeCommand:
-        tags:
-            - { name: "console.command", command: "crud:generate:type" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudMakeNewCommand:
-        tags:
-            - { name: "console.command", command: "crud:generate:new" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudMakeControllerCommand:
-        tags:
-            - { name: "console.command", command: "crud:generate:controller" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudMakeIndexCommand:
-        tags:
-            - { name: "console.command", command: "crud:generate:index" }
-
-    Cadoteu\EntityToFormBundle\Command\CrudGenerateAllCommand:
-        tags:
-            - { name: "console.command", command: "crud:generate" }

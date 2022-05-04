@@ -24,10 +24,7 @@
     "ext-ctype": "*",
     "ext-iconv": "*",
     "baraja-core/simple-php-diff": "^1.0",
-    "cadot.eu/entity-to-form-bundle": "^0.0.9",
-    "cadot.eu/parser-docblock-bundle": "^0.0.1",
     "composer/package-versions-deprecated": "1.11.99.2",
-    "cweagans/composer-patches": "^1.7",
     "dama/doctrine-test-bundle": "^7.0",
     "doctrine/annotations": "^1.0",
     "doctrine/doctrine-bundle": "^2.4",
@@ -95,7 +92,6 @@
     "symfony/phpunit-bridge": "^6.0",
     "symfony/stopwatch": "6.*",
     "symfony/web-profiler-bundle": "6.*",
-    "symplify/easy-coding-standard": "^10.2",
     "zenstruck/browser": "0.9.1",
     "zenstruck/foundry": "^1.16"
   },

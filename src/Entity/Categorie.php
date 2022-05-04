@@ -24,11 +24,7 @@ class Categorie
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private $description;
 
-    #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: "categories")]
-    /*
-     * TPL:no_form
-     * TPL:no_index
-     */
+
     private $article;
 
     #[Gedmo\Slug(fields: ["nom"], unique: true, updatable: true)]

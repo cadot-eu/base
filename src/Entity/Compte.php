@@ -20,9 +20,7 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     use TimeTrait;
 
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: Types::INTEGER)]
-    /**
-     * HIDE:{"roles[0]":"ROLE_SUPERADMIN"}
-     */
+
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
@@ -40,7 +38,7 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::STRING)]
     /**
-     * @var string The hashed password
+     * TPL:no_index
      */
     private $password;
 

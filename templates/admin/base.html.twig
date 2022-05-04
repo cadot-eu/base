@@ -1,11 +1,20 @@
+<!DOCTYPE html>
 <html lang="fr">
 	<head>
 		<meta charset="UTF-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content=""/>
+		<meta name="keywords" content=""/>
 		<meta name="robots" content="noindex"/>
 		<meta name="Language" content="fr"/>
-		<meta name="title" content="administration"/>
+		<meta name="Author" content=""/>
+		<meta name="copyright" content=""/>
+		<title>
+			{% block title %}{% endblock %}
+		</title>
+		<!-- favicon -->
+
 		{% block stylesheets %}
 			{{ encore_entry_link_tags('admin') }}
 		{% endblock %}
@@ -13,6 +22,7 @@
 		{% block javascripts %}
 			{{ encore_entry_script_tags('admin') }}
 		{% endblock %}
+
 	</head>
 	<body>
 		{% include "flash_message.html.twig" %}
@@ -35,9 +45,7 @@
 							<a class="nav-link {{ action== '' ? 'active' }}" href="{{path('home_index')}}" target="_blank">Le site</a>
 						</li>
 						{% if app.user and app.user.isVerified %}
-
-
-							{% set parties = ['parametres','compte','categorie','article','carousel'] %}
+							{% set parties = ['parametres','compte','categorie'] %}
 							{% for partie in parties %}
 								<li class="nav-item">
 									<a class="nav-link  {{ action== partie ? 'active' }}" href="{{path(partie~'_index')}}">{{partie|capitalize}}</a>
@@ -58,4 +66,5 @@
 		<div class="container" style=" min-height: 75rem;padding-top: 4.5rem;"> {% block body %}{% endblock %}
 			</div>
 		</body>
+
 	</html>

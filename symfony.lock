@@ -17,11 +17,11 @@
     "cadot.eu/parser-docblock-bundle": {
         "version": "v0.0.1"
     },
+    "cadot.eu/twigbundle": {
+        "version": "v7.0.15"
+    },
     "composer/package-versions-deprecated": {
         "version": "1.11.99.2"
-    },
-    "cweagans/composer-patches": {
-        "version": "1.7.1"
     },
     "dama/doctrine-test-bundle": {
         "version": "7.0",
@@ -755,9 +755,6 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.10.0"
-    },
-    "symplify/easy-coding-standard": {
-        "version": "10.2.2"
     },
     "theseer/tokenizer": {
         "version": "1.2.1"

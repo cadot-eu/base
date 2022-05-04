@@ -1,8 +1,9 @@
-{# Here for add your Code #} {# End of your Code #}{% extends 'admin/base.html.twig' %}
+{# Here for add your Code #} {# End of your Code #}
+{% extends '/admin/base.html.twig' %}
 {% set route = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% set action = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) | split('/') |
 last %}
-{# Here for add your Code #} {# End of your Code #}
+{#BLOCK#}
 {% block title %}
 	{% if action=='new' %}Création
 		{% elseif action=='copy' %}Duplication
@@ -14,7 +15,7 @@ last %}
 {% block body %}
 	<input
 	type="hidden" id="TBuploadmax" value="{{TBuploadmax()}}">
-	{# Here for add your Code #} {# End of your Code #}
+	{#BLOCK#}
 	<div class="\" col-12 text-center\"">
 		<h1>
 			{% if action=='new' %}Créer
@@ -26,18 +27,25 @@ last %}
 				class="text-right">{# <h5>taille maxi d'envoie:<span id="TBuploadmax">{{TBuploadmax()}}</span>Mo</h5> #}
 			</span>
 		</h1>
-		{# Here for add your Code #} {# End of your Code #}
+		{#BLOCK#}
 	</div>
-	{# Here for add your Code #} {# End of your Code #}
+	{#BLOCK#}
 	<div class="col-12" data-turbo="false">
 		{{ form_start(form) }}
-		{# Here for add your Code #} {# End of your Code #}
+		{#BLOCK#}
 		{{ form_row(form.email) }}
+
 {{ form_row(form.roles) }}
+
 {{ form_row(form.password) }}
+
 {{ form_row(form.isVerified) }}
 
-		{# Here for add your Code #} {# End of your Code #}
+{{ form_row(form.createdAt) }}
+
+{{ form_row(form.updatedAt) }}
+
+		{#BLOCK#}
 		<button class="btn btn-primary" id="bouton_submit" type="submit">
 			{% if action=='new' %}Créer
 				{% else %}Mettre à jour
@@ -48,9 +56,9 @@ last %}
 		</a>
 		<input
 		type="hidden" id="token" value="{{ csrf_token('upload')}}"/>
-		{# Here for add your Code #} {# End of your Code #}
+		{#BLOCK#}
 		{{ form_end(form) }}
-		{# Here for add your Code #} {# End of your Code #}
+		{#BLOCK#}
 	</div>
-	{# Here for add your Code #} {# End of your Code #}
+	{#BLOCK#}
 {% endblock %}

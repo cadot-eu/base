@@ -18,41 +18,59 @@ class CompteType extends AbstractType
     {
         //Here for add your Code //end of your code
 
-        $builder->add(
-            'id',
-            null,
-        )
-            ->add(
-                'email',
-                null,
-            )
+         $builder->add('email',null,
+array (
+  'attr' => 
+  array (
+  ),
+))
+->add('roles',ChoiceType::class,
+array (
+  'multiple' => true,
+  'expanded' => true,
+  'choices' => 
+  array (
+    0 => 'ROLE_USER',
+    1 => 'ROLE_ADMIN',
+    2 => 'ROLE_EDITEUR',
+  ),
+  'attr' => 
+  array (
+    'data-controller' => 'onecheckbox',
+  ),
+))
+->add('password',null,
+array (
+  'attr' => 
+  array (
+  ),
+))
 
-            ->add(
-                'roles',
-                ChoiceType::class,
-                ["multiple" => true, "expanded" => true, "attr" => ["data-controller" => "onecheckbox"]]
-            )
-            ->add(
-                'password',
-                null,
-            )
-
-            ->add(
-                'isVerified',
-                ChoiceType::class,
-            )
-            ->add(
-                'deletedAt',
-                null,
-            )
-            ->add(
-                'createdAt',
-                null,
-            )
-            ->add(
-                'updatedAt',
-                null,
-            );
+->add('isVerified',ChoiceType::class,
+array (
+  'choices' => 
+  array (
+    0 => '<i class="bi bi-toggle-off"></i>',
+    1 => '<i class="bi bi-toggle-on"></i>',
+  ),
+  'attr' => 
+  array (
+  ),
+))
+->add('createdAt',null,
+array (
+  'widget' => 'single_text',
+  'attr' => 
+  array (
+  ),
+))
+->add('updatedAt',null,
+array (
+  'widget' => 'single_text',
+  'attr' => 
+  array (
+  ),
+));
         //Here for add your Code //end of your code
 
     }

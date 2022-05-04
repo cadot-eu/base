@@ -26,7 +26,6 @@
 					<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "id" ? 'active' }} " href='?tri=id&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>id</a></th>
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "email" ? 'active' }} " href='?tri=email&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>email</a></th>
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "roles" ? 'active' }} " href='?tri=roles&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>roles</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "password" ? 'active' }} " href='?tri=password&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>password</a></th>
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "isVerified" ? 'active' }} " href='?tri=isVerified&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>isVerified</a></th>
 {%if action=="deleted" %}
     <th>
@@ -53,9 +52,9 @@
 
 							<td class="my-auto " > {{Compte.id}}
 </td>
-<td class="my-auto " title="{{Compte.email}}"> {{Compte.email|striptags|u.truncate(20, "...")}}
+<td class="my-auto " title="{{Compte.email|striptags|u.truncate(20, "...")}}"> {{Compte.email|striptags|u.truncate(20, "...")}}
 </td>
-<td class="my-auto " title="{{Compte.password}}"> {{Compte.password|striptags|u.truncate(20, "...")}}
+<td class="my-auto " title="{{Compte.roles|join(',')}}"> {{Compte.roles|join(',')}}
 </td>
 <td class="my-auto">
                                 {% set retour=0 %}

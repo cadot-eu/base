@@ -1,39 +1,41 @@
 <?php
-
 //Here for add your Code //end of your code
+
 namespace  App\Controller;
-
 //Here for add your Code //end of your code
+
+use DateTime;
 use App\Entity\Compte;
 use App\Form\CompteType;
 use App\Repository\CompteRepository;
-use App\Service\FileUploader;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Service\FileUploader;
 //Here for add your Code //end of your code
+
 /**
- * @Route("admin/compte")
+ * @Route("/admin/compte")
  */ class CompteController extends AbstractController
 {
     //Here for add your Code //end of your code
-    protected $em;
 
+    protected $em;
     public function __construct(
         EntityManagerInterface $em
         //Here for add your Code //end of your code
+
     ) {
         $this->em = $em;
         //Here for add your Code //end of your code
-    }
 
+    }
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
@@ -43,29 +45,24 @@ use Symfony\Component\Routing\Annotation\Route;
     public function index(CompteRepository $compteRepository, Request $request): Response
     {
         //Here for add your Code //end of your code
+
         $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($compteRepository->findBy([
-            'deletedAt' => null,
-        ]));
-        if ($maxi > 10 && $page * 10 > $maxi) {
-            $page = round($maxi / 10, 0);
-        }
-        $tri = $request->query->get("tri") != null ? [
-            $request->query->get("tri") => $request->query->get("ordre") ?: 'ASC',
-        ] : [];
-        $comptes = $compteRepository->findBy([
-            'deletedAt' => null,
-        ], $tri, 10, ($page - 1) * 10);
+        $maxi = count($compteRepository->findBy(['deletedAt' => null]));
+        if ($maxi > 10 && $page * 10  > $maxi) $page = round($maxi / 10, 0);
+        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
+        $comptes = $compteRepository->findBy(['deletedAt' => null], $tri, 10, ($page - 1) * 10);
         //Here for add your Code //end of your code
+
         return $this->render('/compte/index.html.twig', [
             /*¤index_render¤*/
             'comptes' => $comptes,
-            'pagesMaxi' => $maxi,
+            'pagesMaxi' => $maxi
         ]);
         //Here for add your Code //end of your code
-    }
 
+    }
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
@@ -75,31 +72,29 @@ use Symfony\Component\Routing\Annotation\Route;
     public function deleted(CompteRepository $compteRepository, Request $request): Response
     {
         //Here for add your Code //end of your code
+
         $tabComptes = [];
         foreach ($compteRepository->findAll() as $compte) {
-            if ($compte->getDeletedAt() != null) {
-                $tabComptes[] = $compte;
-            }
+            if ($compte->getDeletedAt() != null) $tabComptes[] = $compte;
         }
         $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
         $maxi = count($tabComptes);
-        if ($page * 10 > $maxi) {
-            $page = round($maxi / 10, 0);
-        }
-        $tri = $request->query->get("tri") != null ? [
-            $request->query->get("tri") => $request->query->get("ordre") ?: 'ASC',
-        ] : [];
+        if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
+        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
         $comptes = array_slice($tabComptes, ($page - 1) * 10, 10);
 
+
         //Here for add your Code //end of your code
+
         return $this->render('/compte/index.html.twig', [
             //Here for add your Code //end of your code
+
             'comptes' => $tabComptes,
-            'pagesMaxi' => $maxi,
+            'pagesMaxi' => $maxi
         ]);
     }
-
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                    ETAT                                    */
     /* -------------------------------------------------------------------------- */
@@ -109,6 +104,7 @@ use Symfony\Component\Routing\Annotation\Route;
     public function etat(Compte $compte, $type = null, $valeur = null): Response
     {
         //Here for add your Code //end of your code
+
         if ($type) {
             $method = 'set' . $type;
             $compte->$method($valeur);
@@ -116,9 +112,11 @@ use Symfony\Component\Routing\Annotation\Route;
             $this->em->flush();
         }
         //Here for add your Code //end of your code
+
         return $this->redirectToRoute('compte_index');
     }
     //Here for add your Code //end of your code
+
 
     /* -------------------------------------------------------------------------- */
     /*                                NEW AND EDIT                                */
@@ -130,22 +128,27 @@ use Symfony\Component\Routing\Annotation\Route;
     public function new(Request $request, FileUploader $fileUploader, Compte $compte = null, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
-        if (! $compte) {
-            $compte = new Compte();
-        } //for new
+
+        if (!$compte) $compte = new Compte(); //for new
         //Here for add your Code //end of your code
+
         $form = $this->createForm(CompteType::class, $compte);
         //Here for add your Code //end of your code
+
         $form->handleRequest($request);
         //Here for add your Code //end of your code
+
         if ($form->isSubmitted() && $form->isValid()) {
             //Here for add your Code //end of your code
-            if ($request->files->get('compte')) {
+
+            if ($request->files->get('compte'))
                 foreach ($request->files->get('compte') as $name => $data) {
                     $fichier = $form->get($name)->getData();
                     //Here for add your Code //end of your code
+
                     if ($fichier) {
                         //Here for add your Code //end of your code
+
                         if (get_class($fichier) == 'Doctrine\Common\Collections\ArrayCollection' || get_class($fichier) == "Doctrine\ORM\PersistentCollection") {
                             $fichierName = [];
                             foreach ($fichier as $num => $fiche) {
@@ -164,11 +167,13 @@ use Symfony\Component\Routing\Annotation\Route;
                             $compte->$function($fichierName);
                         }
                         //Here for add your Code //end of your code
+
                     }
                     //Here for add your Code //end of your code
+
                 }
-            }
             //Here for add your Code //end of your code
+
             /* -------------------------------- language -------------------------------- */
             // $list = $request->request->get('compte');
             // $tab = [];
@@ -183,25 +188,27 @@ use Symfony\Component\Routing\Annotation\Route;
             //     $compte->$set(json_encode($value));
             // }
             //Here for add your Code //end of your code
+
             //TODO: par listener
-            if ($compte->getcreatedAt() == 'null') {
-                $compte->setCreatedAt(new DateTime('now'));
-            }
+            if ($compte->getcreatedAt() == 'null') $compte->setCreatedAt(new DateTime('now'));
             $compte->setUpdatedAt(new DateTime('now'));
             $em->persist($compte);
             $em->flush();
             //Here for add your Code //end of your code
+
             return $this->redirectToRoute('compte_index');
         }
         //Here for add your Code //end of your code
+
         return $this->render('/compte/new.html.twig', [
             //Here for add your Code //end of your code
+
             'compte' => $compte,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
-
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                    SHOW                                    */
     /* -------------------------------------------------------------------------- */
@@ -211,9 +218,11 @@ use Symfony\Component\Routing\Annotation\Route;
     public function show(Compte $compte): Response
     {
         //Here for add your Code //end of your code
-    }
 
+
+    }
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                    CLONE                                   */
     /* -------------------------------------------------------------------------- */
@@ -223,6 +232,7 @@ use Symfony\Component\Routing\Annotation\Route;
     public function clone(Compte $comptec, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
+
         $compte = clone $comptec;
         if (property_exists($compte, 'slug')) {
             $sfunc = 'set' . ucfirst('');
@@ -235,10 +245,11 @@ use Symfony\Component\Routing\Annotation\Route;
         $em->persist($compte);
         $em->flush();
         //Here for add your Code //end of your code
+
         return $this->redirectToRoute('compte_index');
     }
-
     //Here for add your Code //end of your code
+
     /* -------------------------------------------------------------------------- */
     /*                                   DELETE                                   */
     /* -------------------------------------------------------------------------- */
@@ -248,28 +259,32 @@ use Symfony\Component\Routing\Annotation\Route;
     public function delete(Request $request, Compte $compte, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
+
         if ($this->isCsrfTokenValid('delete' . $compte->getId(), $request->request->get('_token'))) {
             //Here for add your Code //end of your code
+
             if ($request->request->has('delete_delete')) {
                 //Here for add your Code //end of your code
+
                 $em->remove($compte);
             }
-            if ($request->request->has('delete_restore')) {
+            if ($request->request->has('delete_restore'))
                 $compte->setDeletedAt(null);
-            }
-            if ($request->request->has('delete_softdelete')) {
+            if ($request->request->has('delete_softdelete'))
                 $compte->setDeletedAt(new DateTime('now'));
-            }
             //Here for add your Code //end of your code
+
             $em->flush();
         }
         //Here for add your Code //end of your code
-        if ($request->request->has('delete_softdelete')) {
+
+        if ($request->request->has('delete_softdelete'))
             return $this->redirectToRoute('compte_index');
-        } else {
+        else
             return $this->redirectToRoute('compte_deleted');
-        }
     }
     //Here for add your Code //end of your code
+
 }
 //Here for add your Code //end of your code
+

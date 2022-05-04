@@ -23,6 +23,5 @@ return [
     SymfonyCasts\Bundle\VerifyEmail\SymfonyCastsVerifyEmailBundle::class => ['all' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     DAMA\DoctrineTestBundle\DAMADoctrineTestBundle::class => ['test' => true],
-    Cadoteu\ParserDocblockBundle\ParserDocblockBundle::class => ['all' => true],
-    Cadoteu\EntityToFormBundle\EntityToFormBundle::class => ['all' => true],
+
 ];
