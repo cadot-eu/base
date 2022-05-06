@@ -1,0 +1,12 @@
+[submodule "assets/controllers/base"]
+	path = assets/controllers/base
+	url = git@github.com:cadot-eu/basestimulus.git
+[submodule "assets/js"]
+	path = assets/js
+	url = git@github.com:cadot-eu/basejs.git
+[submodule "src/Service"]
+	path = src/Service
+	url = git@github.com:cadot-eu/baseservice.git
+[submodule "src/Command"]
+	path = src/Command
+	url = git@github.com:cadot-eu/basecommand.git
