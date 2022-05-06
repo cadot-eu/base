@@ -6,6 +6,6 @@
 		<p>{{TBuploadmax()}}</p>
 		<p>
 			Test de la présence des controllers stimulus de base</p>
-		<img src="/build/avatar.jpg" width="50px" height="50px" data-controller="base--bigpicture">
+		<img src="{{asset('/build/avatar.jpg')|imagin_filter('carree')}}" width="50px" height="50px" data-controller="base--bigpicture">
 	</h5>
 {% endblock %}
