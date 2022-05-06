@@ -6,6 +6,7 @@
 		<p>{{TBuploadmax()}}</p>
 		<p>
 			Test de la présence des controllers stimulus de base</p>
-		<img src="{{asset('/build/avatar.jpg')|imagin_filter('carree')}}" width="50px" height="50px" data-controller="base--bigpicture">
+		<img src="{{asset('/build/avatar.jpg')|imagine_filter('moyen')}}" width="50px" height="50px" data-controller="base--bigpicture">
+<p> Si l'image n'apparait pas, inspecter (chown www-data:)</p>
 	</h5>
 {% endblock %}
