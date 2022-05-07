@@ -1,6 +1,6 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\base;
 
 use App\Entity\Compte;
 use App\Entity\Parametres;
