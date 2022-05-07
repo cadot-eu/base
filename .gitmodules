@@ -7,3 +7,6 @@
 [submodule "src/Command/base"]
 	path = src/Command/base
 	url = git@github.com:cadot-eu/basecommand.git
+[submodule "src/Service/base"]
+	path = src/Service/base
+	url = git@github.com:cadot-eu/baseservice.git
