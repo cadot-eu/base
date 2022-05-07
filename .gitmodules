@@ -13,3 +13,6 @@
 [submodule "src/EventSubscriber/base"]
 	path = src/EventSubscriber/base
 	url = git@github.com:cadot-eu/basesubscriber.git
+[submodule "src/Imagine"]
+	path = src/Imagine
+	url = git@github.com:cadot-eu/baseimagine.git
