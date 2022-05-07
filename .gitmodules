@@ -7,6 +7,3 @@
 [submodule "src/Service"]
 	path = src/Service
 	url = git@github.com:cadot-eu/baseservice.git
-[submodule "src/Command"]
-	path = src/Command
-	url = git@github.com:cadot-eu/basecommand.git
