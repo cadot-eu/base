@@ -10,3 +10,6 @@
 [submodule "src/Service/base"]
 	path = src/Service/base
 	url = git@github.com:cadot-eu/baseservice.git
+[submodule "src/EventSubscriber/base"]
+	path = src/EventSubscriber/base
+	url = git@github.com:cadot-eu/basesubscriber.git
