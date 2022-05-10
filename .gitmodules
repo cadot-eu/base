@@ -1,21 +1,28 @@
 [submodule "assets/controllers/base"]
-	path = assets/controllers/base
+	active = true
 	url = git@github.com:cadot-eu/basestimulus.git
+	branch = main
 [submodule "assets/js"]
-	path = assets/js
+	active = true
 	url = git@github.com:cadot-eu/basejs.git
+	branch = main
 [submodule "src/Command/base"]
-	path = src/Command/base
+	active = true
 	url = git@github.com:cadot-eu/basecommand.git
-[submodule "src/Service/base"]
-	path = src/Service/base
-	url = git@github.com:cadot-eu/baseservice.git
+	branch = main
 [submodule "src/EventSubscriber/base"]
-	path = src/EventSubscriber/base
+	active = true
 	url = git@github.com:cadot-eu/basesubscriber.git
-[submodule "src/Twig/base"]
-	path = src/Twig/base
-	url = git@github.com:cadot-eu/basetwig.git
+	branch = main
 [submodule "src/Imagine"]
-	path = src/Imagine
+	active = true
 	url = git@github.com:cadot-eu/baseimagine.git
+	branch = main
+[submodule "src/Service/base"]
+	active = true
+	url = git@github.com:cadot-eu/baseservice.git
+	branch = main
+[submodule "src/Twig/base"]
+	active = true
+	url = git@github.com:cadot-eu/basetwig.git
+	branch = main
