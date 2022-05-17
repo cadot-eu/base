@@ -2787,6 +2787,11 @@ find-up@^4.0.0:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
 
+flag-icons@^6.3.0:
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/flag-icons/-/flag-icons-6.3.0.tgz#f5831c5a1b83f67f9952342b033792c09aea223a"
+  integrity sha512-/LrS5M4iJO2aCpZxwXfoxiOCvknN/k3c07v1r0wLTJY4B4oft8UijYr24ZAPEcaqbw/g4UiZjIgstMDatJ5VVg==
+
 follow-redirects@^1.0.0, follow-redirects@^1.2.3:
   version "1.14.9"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.14.9.tgz#dd4ea157de7bfaf9ea9b3fbd85aa16951f78d8d7"
@@ -4485,6 +4490,11 @@ resolve@^1.14.2, resolve@^1.9.0:
     path-parse "^1.0.7"
     supports-preserve-symlinks-flag "^1.0.0"
 
+resource-manager-js@^5.0.7:
+  version "5.0.7"
+  resolved "https://registry.yarnpkg.com/resource-manager-js/-/resource-manager-js-5.0.7.tgz#df2a4e65be234e2e846354ca31421fb0ae1c27c6"
+  integrity sha512-MCx8XHSonLhBeC6FvMyWJZ73g9Rk4NkLIOguxrS9Q6IFqY/GBnv75UCwj0gv3GQRWz8ei4X3A6VLFNfLLYddMg==
+
 retry@^0.13.1:
   version "0.13.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.13.1.tgz#185b1587acf67919d63b357349e03537b2484658"
@@ -5364,3 +5374,10 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
+
+youtube-video-js@^3.5.0:
+  version "3.5.0"
+  resolved "https://registry.yarnpkg.com/youtube-video-js/-/youtube-video-js-3.5.0.tgz#7dca6317f8e38561e3d5c95022282941ae984e54"
+  integrity sha512-OqGJBIpC3UnESxWtJMq6J6evqdUD3tKF8pPh6VCQ/YxEnWSFQ6Ssrc0nL9GMpEhZ3ZGjJnEd28x9yPl8zwMIBg==
+  dependencies:
+    resource-manager-js "^5.0.7"

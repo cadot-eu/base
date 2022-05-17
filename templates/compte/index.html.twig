@@ -2,6 +2,7 @@
 {% extends '/admin/base.html.twig' %}
 {% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
 {% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
+{% set current_path = app.request.get('_route') %}
 {# Here for add your Code #} {# End of your Code #}
 
 {% block title %}
@@ -27,17 +28,13 @@
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "email" ? 'active' }} " href='?tri=email&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>email</a></th>
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "roles" ? 'active' }} " href='?tri=roles&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>roles</a></th>
 <th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "isVerified" ? 'active' }} " href='?tri=isVerified&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>isVerified</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "prixCercueil" ? 'active' }} " href='?tri=prixCercueil&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>prixCercueil</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "prixPerso" ? 'active' }} " href='?tri=prixPerso&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>prixPerso</a></th>
 {%if action=="deleted" %}
     <th>
     <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
     </th>
 {% endif %}
-<th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
-</th>
-<th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
-</th>
 					{# Here for add your Code #} {# End of your Code #}
 
 					<th>Actions</th>
@@ -45,14 +42,14 @@
 			</thead>
 			<tbody class="sortable">
 				{% for Compte in comptes %}
-					{% if true  %}
+					{% if true and Compte.roles[0]  != 'ROLE_SUPERADMIN' %}
 						<tr
 							data-num="{{Compte.id }}">
 							{# Here for add your Code #} {# End of your Code #}
 
 							<td class="my-auto " > {{Compte.id}}
 </td>
-<td class="my-auto " title="{{Compte.email|striptags|u.truncate(20, "...")}}"> {{Compte.email|striptags|u.truncate(20, "...")}}
+<td class="my-auto " title="{{Compte.email|striptags|u.truncate(20, '...')}}"> {{Compte.email|striptags|u.truncate(20, '...')}}
 </td>
 <td class="my-auto " title="{{Compte.roles|join(',')}}"> {{Compte.roles|join(',')}}
 </td>
@@ -70,8 +67,6 @@
                                 {% endif %}
                                 <a href="{{path('compte_etat',{'id':Compte.id,'type':'isVerified','valeur':choice_isVerified|keys[numr]})}}" style='font-size:2rem;'  title='{{ choice_isVerified|keys[retour]}}'> {{ choice_isVerified[ choice_isVerified|keys[retour]]|raw}}</a>
 </td>
-<td>{{ Compte.createdAt is not empty ? Compte.createdAt|date('d/m à H:i', 'Europe/Paris')}}</td>
-<td>{{ Compte.updatedAt is not empty ? Compte.updatedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
 <td>{{ Compte.deletedAt is not empty ? Compte.deletedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
 							{# Here for add your Code #} {# End of your Code #}
 
@@ -187,8 +182,10 @@
 					</li>
 				{% endfor %}
 			{% endif %}
+
+
 			{# suivant #}
-			<li class="page-item {{ app.request.query.get('page') >= (pagesMaxi/10)|number_format ? 'disabled' }}">
+			<li class="page-item {{ app.request.query.get('page') > (pagesMaxi/10)|number_format ? 'disabled' }}">
 				{% if app.request.query.get('page')==0 %}
 					{% set suivant = 2 %}
 				{% else %}

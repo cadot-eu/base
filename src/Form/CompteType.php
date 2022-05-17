@@ -8,6 +8,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 //Here for add your Code //end of your code
 
 class CompteType extends AbstractType
@@ -30,43 +31,24 @@ array (
   'expanded' => true,
   'choices' => 
   array (
-    0 => 'ROLE_USER',
-    1 => 'ROLE_ADMIN',
-    2 => 'ROLE_EDITEUR',
+    'client' => 'ROLE_USER',
+    'administrateur' => 'ROLE_ADMIN',
   ),
   'attr' => 
   array (
-    'data-controller' => 'onecheckbox',
+    'data-controller' => 'base--onecheckbox',
   ),
 ))
-->add('password',null,
+
+->add('prixCercueil',MoneyType::class,
 array (
   'attr' => 
   array (
   ),
 ))
 
-->add('isVerified',ChoiceType::class,
+->add('prixPerso',MoneyType::class,
 array (
-  'choices' => 
-  array (
-    0 => '<i class="bi bi-toggle-off"></i>',
-    1 => '<i class="bi bi-toggle-on"></i>',
-  ),
-  'attr' => 
-  array (
-  ),
-))
-->add('createdAt',null,
-array (
-  'widget' => 'single_text',
-  'attr' => 
-  array (
-  ),
-))
-->add('updatedAt',null,
-array (
-  'widget' => 'single_text',
   'attr' => 
   array (
   ),

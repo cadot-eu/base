@@ -18,6 +18,4 @@ require('../assets/js/glightbox')
 require('../assets/js/aos')
 
 import "./styles/app.scss";
-require('../assets/styles/variables.css')
-
 require('../assets/js/tippy')

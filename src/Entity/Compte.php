@@ -18,9 +18,12 @@ use Doctrine\DBAL\Types\Types;
 class Compte implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimeTrait;
-
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: Types::INTEGER)]
-
+    /**
+     * HIDE:{"roles[0]":"ROLE_SUPERADMIN"}
+     * TPL:no_created
+     * TPL:no_updated
+     */
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
@@ -29,16 +32,17 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::JSON)]
     /**
      * choice
-     * options:["ROLE_USER","ROLE_ADMIN","ROLE_EDITEUR"]
+     * options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"}
      * TWIG:join(',')
      * OPT:{"multiple":true,"expanded":true}
-     * ATTR:{"data-controller":"onecheckbox"}
+     * ATTR:{"data-controller":"base--onecheckbox"}
      */
     private $roles = [];
 
     #[ORM\Column(type: Types::STRING)]
     /**
      * TPL:no_index
+     * TPL:no_form
      */
     private $password;
 
@@ -47,8 +51,21 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * choiceenplace
      * options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
+     * TPL:no_form
      */
     private $isVerified = false;
+
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
+    /**
+     * money
+     */
+    private $prixCercueil;
+
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
+    /**
+     * money
+     */
+    private $prixPerso;
 
     public function getId(): ?int
     {
@@ -115,6 +132,30 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPrixCercueil(): ?string
+    {
+        return $this->prixCercueil;
+    }
+
+    public function setPrixCercueil(?string $prixCercueil): self
+    {
+        $this->prixCercueil = $prixCercueil;
+
+        return $this;
+    }
+
+    public function getPrixPerso(): ?string
+    {
+        return $this->prixPerso;
+    }
+
+    public function setPrixPerso(?string $prixPerso): self
+    {
+        $this->prixPerso = $prixPerso;
 
         return $this;
     }

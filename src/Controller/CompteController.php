@@ -15,12 +15,11 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Service\FileUploader;
+use App\Service\base\FileUploader;
 //Here for add your Code //end of your code
 
-/**
- * @Route("/admin/compte")
- */ class CompteController extends AbstractController
+#[Route('/admin/compte')]
+class CompteController extends AbstractController
 {
     //Here for add your Code //end of your code
 
@@ -39,9 +38,7 @@ use App\Service\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/", name="compte_index", methods={"GET"})
-     */
+    #[Route('/', name: 'compte_index', methods: ['GET'])]
     public function index(CompteRepository $compteRepository, Request $request): Response
     {
         //Here for add your Code //end of your code
@@ -66,9 +63,7 @@ use App\Service\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/deleted", name="compte_deleted", methods={"GET"})
-     */
+    #[Route('/deleted', name: 'compte_deleted', methods: ['GET'])]
     public function deleted(CompteRepository $compteRepository, Request $request): Response
     {
         //Here for add your Code //end of your code
@@ -80,6 +75,7 @@ use App\Service\FileUploader;
         $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
         $maxi = count($tabComptes);
         if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
+        if ($page == 0) $page = 1;
         $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
         $comptes = array_slice($tabComptes, ($page - 1) * 10, 10);
 
@@ -113,7 +109,7 @@ use App\Service\FileUploader;
         }
         //Here for add your Code //end of your code
 
-        return $this->redirectToRoute('compte_index');
+        return $this->redirectToRoute('compte_index', [], Response::HTTP_SEE_OTHER);
     }
     //Here for add your Code //end of your code
 
@@ -121,10 +117,8 @@ use App\Service\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                NEW AND EDIT                                */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/new", name="compte_new", methods={"GET","POST"})
-     *  @Route("/{id}/edit", name="compte_edit", methods={"GET","POST"})
-     */
+    #[Route('/new', name: 'compte_new', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'compte_edit', methods: ['GET', 'POST'])]
     public function new(Request $request, FileUploader $fileUploader, Compte $compte = null, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
@@ -174,21 +168,6 @@ use App\Service\FileUploader;
                 }
             //Here for add your Code //end of your code
 
-            /* -------------------------------- language -------------------------------- */
-            // $list = $request->request->get('compte');
-            // $tab = [];
-            // foreach ($list as $name => $data) {
-            //     if (strpos($name, '_LANGUAGE_') !== false) {
-            //         $exp = explode('_LANGUAGE_', $name);
-            //         $tab[$exp[0]][$exp[1]] = $data;
-            //     }
-            // }
-            // foreach ($tab as $name => $value) {
-            //     $set = 'set' . ucfirst($name);
-            //     $compte->$set(json_encode($value));
-            // }
-            //Here for add your Code //end of your code
-
             //TODO: par listener
             if ($compte->getcreatedAt() == 'null') $compte->setCreatedAt(new DateTime('now'));
             $compte->setUpdatedAt(new DateTime('now'));
@@ -196,7 +175,7 @@ use App\Service\FileUploader;
             $em->flush();
             //Here for add your Code //end of your code
 
-            return $this->redirectToRoute('compte_index');
+            return $this->redirectToRoute('compte_index', [], Response::HTTP_SEE_OTHER);
         }
         //Here for add your Code //end of your code
 
@@ -212,9 +191,7 @@ use App\Service\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    SHOW                                    */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}", name="compte_show", methods={"GET"})
-     */
+    #[Route('/{id}', name: 'compte_show', methods: ['GET'])]
     public function show(Compte $compte): Response
     {
         //Here for add your Code //end of your code
@@ -226,9 +203,7 @@ use App\Service\FileUploader;
     /* -------------------------------------------------------------------------- */
     /*                                    CLONE                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}/clone", name="compte_clone", methods={"GET","POST"})
-     */
+    #[Route('/{id}/clone', name: 'compte_clone', methods: ['GET', 'POST'])]
     public function clone(Compte $comptec, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
@@ -246,16 +221,14 @@ use App\Service\FileUploader;
         $em->flush();
         //Here for add your Code //end of your code
 
-        return $this->redirectToRoute('compte_index');
+        return $this->redirectToRoute('compte_index', [], Response::HTTP_SEE_OTHER);
     }
     //Here for add your Code //end of your code
 
     /* -------------------------------------------------------------------------- */
     /*                                   DELETE                                   */
     /* -------------------------------------------------------------------------- */
-    /**
-     * @Route("/{id}", name="compte_delete", methods={"POST"})
-     */
+    #[Route('/{id}', name: 'compte_delete', methods: ['POST'])]
     public function delete(Request $request, Compte $compte, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
@@ -279,9 +252,9 @@ use App\Service\FileUploader;
         //Here for add your Code //end of your code
 
         if ($request->request->has('delete_softdelete'))
-            return $this->redirectToRoute('compte_index');
+            return $this->redirectToRoute('compte_index', [], Response::HTTP_SEE_OTHER);
         else
-            return $this->redirectToRoute('compte_deleted');
+            return $this->redirectToRoute('compte_deleted', [], Response::HTTP_SEE_OTHER);
     }
     //Here for add your Code //end of your code
 

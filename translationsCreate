@@ -1,0 +1,2 @@
+./bin/console translation:extract --force en --format json
+./bin/console translation:extract --force fr --format json

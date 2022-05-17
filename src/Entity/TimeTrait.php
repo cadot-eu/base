@@ -18,7 +18,8 @@ trait TimeTrait
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     /**
-    TPL:no_form
+     * TPL:no_form
+     * opt:{"label":"Supprimé le"}
      */
     private $deletedAt;
 
@@ -35,6 +36,9 @@ trait TimeTrait
     }
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /**
+     * opt:{"label":"Créé le"}
+     */
     private $createdAt;
 
     public function getcreatedAt(): ?\DateTime
@@ -50,6 +54,9 @@ trait TimeTrait
     }
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    /**
+     * opt:{"label":"Mis à jour le"}
+     */
     private $updatedAt;
 
     public function getupdatedAt(): ?\DateTime

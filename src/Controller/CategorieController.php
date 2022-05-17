@@ -39,6 +39,7 @@ use Symfony\Component\Routing\Annotation\Route;
         if ($page * 10 > $maxi) {
             $page = round($maxi / 10, 0);
         }
+        if ($page == 0) $page = 1;
         $tri = $request->query->get("tri") != null ? [
             $request->query->get("tri") => $request->query->get("ordre") ?: 'ASC',
         ] : [];
@@ -99,7 +100,7 @@ use Symfony\Component\Routing\Annotation\Route;
     public function new(Request $request, FileUploader $fileUploader, Categorie $categorie = null, EntityManagerInterface $em): Response
     {
         //Here for add your Code //end of your code
-        if (! $categorie) {
+        if (!$categorie) {
             $categorie = new Categorie();
         } //for new
         $form = $this->createForm(CategorieType::class, $categorie);
@@ -150,7 +151,6 @@ use Symfony\Component\Routing\Annotation\Route;
             //     $categorie->$set(json_encode($value));
             // }
             //Here for add your Code //end of your code
-            //TODO: par listener
             if ($categorie->getcreatedAt() == 'null') {
                 $categorie->setCreatedAt(new DateTime('now'));
             }

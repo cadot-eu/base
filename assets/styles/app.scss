@@ -2,16 +2,46 @@
 /*                                    font                                    */
 /* -------------------------------------------------------------------------- */
 //@import
+$fw-thin: 100;
+$fw-ultralight: 100;
+$fw-extralight: 100;
+$fw-hairline: 100;
+$fw-ligth: 200;
+$fw-book: 300;
+$fw-regular: 400;
+$fw-normal: 400;
+$fw-plain: 400;
+$fw-standard: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-demibold: 600;
+$fw-bold: 700;
+$fw-heavy: 800;
+$fw-black: 800;
+$fw-extrabold: 800;
+$fw-extrablack: 900;
+$fw-ultrablack: 900;
+$fw-ultrabold: 900;
+$fw-heavyblack: 900;
+$fw-fat: 900;
+$fw-poster: 900;
+
+/* -------------------------------------------------------------------------- */
+/*                                    color                                   */
+/* -------------------------------------------------------------------------- */
+
+
 /* -------------------------------------------------------------------------- */
 /*                           Modification bootstrap                           */
 /* -------------------------------------------------------------------------- */
-
 //@import "./_variables.scss"; //https://bootstrap.build/
 @import "~bootstrap/scss/bootstrap";
+
 //@import "./custom.scss"; //https://bootstrap.build/
 /* -------------------------------------------------------------------------- */
 /*                                    font                                    */
 /* -------------------------------------------------------------------------- */
+
 
 /* -------------------------------------------------------------------------- */
 /*                                   header                                   */
@@ -37,22 +67,64 @@
 /*                                Environnement                               */
 /* -------------------------------------------------------------------------- */
 
-.zoom:hover {
-  transform: scale(1.2);
-}
-.star {
-  color: orange;
-  list-style-type: none;
-}
 .required:after {
   position: absolute;
   content: "*";
   color: red;
 }
-a {
-  text-decoration: none;
+
+
+.tooltips {
+  position: relative;
+  display: inline-block;
 }
-.shadow-drop-bl {
-  -webkit-animation: shadow-drop-bl 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s both;
-  animation: shadow-drop-bl 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 2s both;
+
+.tooltips .tooltipstext {
+  visibility: hidden;
+  width: 130px;
+  background-color: #6e9755;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  right: 50px;
+  bottom: 7px;
+  font-size: 0.6rem;
+  height: 25px;
+  position: absolute;
+  z-index: 1;
 }
+
+.tooltips:hover .tooltipstext {
+  visibility: visible;
+}
+
+.tooltips .blanc {
+  display: none !important;
+}
+
+.tooltips:hover .vert {
+  display: none !important;
+}
+
+.tooltips:hover .blanc {
+  display: block !important;
+}
+
+.drapeau {
+  display: block;
+  background-size: 40px 30px;
+  height: 30px;
+  width: 40px;
+  border: none;
+
+  &.fr {
+    background-image: url("/node_modules/flag-icons/flags/4x3/fr.svg");
+  }
+
+  &.en {
+    background-image: url("/node_modules/flag-icons/flags/4x3/gb.svg");
+  }
+}
+
+

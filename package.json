@@ -42,6 +42,7 @@
     "clipboard": "^2.0.8",
     "codethereal-iconpicker": "^1.2.1",
     "counterup2": "^2.0.2",
+    "flag-icons": "^6.3.0",
     "glightbox": "^3.2.0",
     "inputmask": "^5.0.6",
     "jquery": "^3.6.0",
@@ -60,7 +61,8 @@
     "stimulus-use": "^0.41.0",
     "sweetalert2": "^11.4.8",
     "swiper": "^8.1.0",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "youtube-video-js": "^3.5.0"
   },
   "browserslist": [
     "> .05%"

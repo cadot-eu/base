@@ -12,16 +12,19 @@ use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: ParametresRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
+#[UniqueEntity('nom')]
 class Parametres
 {
     use TimeTrait;
 
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: Types::INTEGER)]
-    /*
-     * TPL=no_action_add
-     * TPL=no_access_deleted
-     * TPL=no_index
-     * ORDRE=nom=>ASC
+    /**
+     * TPL:no_action_add
+     * TPL:no_access_deleted
+     * TPL:no_created
+     * TPL:no_updated
+     * TPL:no_index
+     * ORDRE:{"nom":"ASC"}
      */
     private $id;
 
@@ -31,6 +34,20 @@ class Parametres
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     /*TWIG=striptags|u.truncate(20, '...') */
     private $valeur;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * ATTR:{"disabled":true}
+     */
+
+    private $aide;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * hidden
+     * TPL:no_index
+     */
+    private $type;
 
     public function getId(): ?int
     {
@@ -61,6 +78,30 @@ class Parametres
         } else {
             $this->valeur = $valeur;
         }
+
+        return $this;
+    }
+
+    public function getAide(): ?string
+    {
+        return $this->aide;
+    }
+
+    public function setAide(?string $aide): self
+    {
+        $this->aide = $aide;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(?string $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

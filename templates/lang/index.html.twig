@@ -1,50 +1,71 @@
 {% extends '/admin/base.html.twig' %}
 {% block title %}
-	Module langue
-{% endblock
-%}
+    Module langue
+{% endblock %}
 {% block body %}
 
-	<div class="container">
-		<div class="row">
-			<form method="post" data-turbo="false">
-				<div class="d-flex justify-content-end">
-					<button type="submit" class="btn btn-primary btn-lg btn-block position-fixed " style="z-index:2000;">
-						Sauvegarder
-					</button>
-				</div>
+    <div class="container">
+        <div class="row">
+            <form method="post" data-turbo="false">
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary btn-lg btn-block position-fixed " style="z-index:2000;">
+                        Sauvegarder
+                    </button>
+                </div>
+                <!-- Nav tabs -->
+                <div class="row mt-5 pt-2">
+                    <ul class="nav nav-tabs " id="myTab" role="tablist">
+                        {% for nom,langs in tab %}
+                            {% set nomclean =  nom|split('+')[0] %}
+                            <li class="nav-item mx-1" role="presentation">
+                                <a href="#{{ nomclean }}" class="nav-link active" id="home-tab">{{ nomclean }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        home
+                    </div>
+                    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        profile
+                    </div>
+                    <div class="tab-pane" id="messages" role="tabpanel" aria-labelledby="messages-tab">
+                        messages
+                    </div>
+                </div>
+                {% for nom,langs in tab %}
+                    {% set nomclean =  nom|split('+')[0] %}
+                    <h2 id="{{ nomclean }}">
+                        {{ nomclean|capitalize }}
+                    </h2>
+                    <hr>
+                        <div class="row">
+                            <div class="mb-3 col-12">
+                                {% for champ in langs.base %}
+                                    {% set compteur = loop.index0 %}
+                                    <div class="input-group mb-3">
+                                        <label for="" class="form-label col-3">
+                                            {{ champ }}
+                                        </label>
+                                        {% for nomlang,champslang in langs %}
+                                            {% if nomlang!='base' %}
+                                                <span class="input-group-text " id="basic-addon1">
+                                                    {{ nomlang }}
+                                                </span>
+                                                <input type="text" class="form-control " aria-describedby="basic-addon1" name="{{ nom }}[{{ nomlang }}][{{ compteur }}]" value="{{ tab[nom][nomlang][champ]|replace({" __": "" }) }}"/>
+                                            {% else %}
+                                                <input type="hidden" name="{{ nom }}[base][{{ compteur }}]" value="{{ champ }}"/>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
 
-				{% for nom,langs in tab %}
-
-					<h2>
-						{{ nom|split('+')[0]|capitalize }}
-					</h2>
-					<hr>
-					<div class="row">
-						<div class="mb-3 col-12">
-							{% for champ in langs.base %}
-								{% set compteur = loop.index0 %}
-								<div class="input-group mb-3">
-									<label for="" class="form-label col-3">
-										{{champ}}
-									</label>
-									{% for nomlang,champslang in langs %}
-										{% if nomlang!='base' %}
-											<span class="input-group-text " id="basic-addon1">
-												{{nomlang}}
-											</span>
-											<input type="text" class="form-control " aria-describedby="basic-addon1" name="{{ nom }}[{{ nomlang }}][{{compteur}}]" value="{{tab[nom][nomlang][champ]|replace({" __": "" })}}"/>
-										{% else %}
-											<input type="hidden" name="{{ nom }}[base][{{compteur}}]" value="{{champ}}"/>
-										{% endif %}
-									{% endfor %}
-								</div>
-
-							{% endfor %}
-						</div>
-					</div>
-				{% endfor %}
-			</form>
-		</div>
-	</div>
-{% endblock %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    {% endblock %}

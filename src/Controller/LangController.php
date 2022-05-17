@@ -19,20 +19,27 @@ class LangController extends AbstractController
             foreach ($request->request->all() as $file => $langetvalues) {
                 foreach ($langetvalues['base'] as $num => $champ) {
                     foreach ($langetvalues as $lang => $values) {
-                        if ($lang != 'base') {
-                            if (isset($langetvalues[$lang][$num])) $tab[$lang][$champ] = $langetvalues[$lang][$num];
+                        if ($lang != 'base' && isset($langetvalues[$lang][$num])) {
+                            $res = substr($langetvalues[$lang][$num], 0, 2) == '__' ? substr($langetvalues[$lang][$num], 2) : $langetvalues[$lang][$num];
+                            $tab[$lang][$champ] = $res;
                         }
                     }
                 }
 
                 foreach ($tab as $nomlang => $valeurs) {
                     $retour = file_put_contents('/app/translations/' . "$file.$nomlang" . '.json', json_encode($valeurs));
-                    if ($retour) $filesok[] = $file;
-                    else $filenot[] = $file;
+                    if ($retour) {
+                        $filesok[] = $file;
+                    } else {
+                        $filenot[] = $file;
+                    }
                 }
             }
-            if ($filesok) $this->addFlash('success', 'Fichiers ' . implode(',', $filesok) . ' sauvegardé');
-            else $this->addFlash('error', 'Fichiers ' . implode(',', $filesok) . 'non sauvegardé');
+            if ($filesok) {
+                $this->addFlash('success', 'Fichiers ' . implode(',', $filesok) . ' sauvegardé');
+            } else {
+                $this->addFlash('error', 'Fichiers ' . implode(',', $filesok) . 'non sauvegardé');
+            }
         }
 
         $path    = '/app/translations/';
