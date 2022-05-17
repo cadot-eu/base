@@ -44,4 +44,12 @@ trait CategoriesTrait
 
         return $this;
     }
+    public function getCategoriesjoin(): String
+    {
+        $res = '';
+        foreach ($this->categories as $cat) {
+            $res .= $cat->getNom() . ',';
+        }
+        return substr($res, 0, -1);
+    }
 }
