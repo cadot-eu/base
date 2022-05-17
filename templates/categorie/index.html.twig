@@ -1,117 +1,107 @@
-{# Here for add your Code #}
-{# End of your Code #}
-{% extends 'admin/base.html.twig' %}
+{# Here for add your Code #} {# End of your Code #}
+{% extends '/admin/base.html.twig' %}
 {% set route =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))%}
 {% set action =path(app.request.attributes.get('_route'),app.request.attributes.get('_route_params'))| split('/')| last%}
-{# Here for add your Code #}
-{# End of your Code #}
-	{% block title %}
-Categorie
+{% set current_path = app.request.get('_route') %}
+{# Here for add your Code #} {# End of your Code #}
+
+{% block title %}
+	Categorie
 {% endblock %}
 
-	{% block body %}
+{% block body %}
 
-	{# Here for add your Code #}
-	{# End of your Code #}<h1>
-	Categorie
-	</h1>
-	{# Here for add your Code #}
-	{# End of your Code #}
-		<div>
-			<table class="table table-responsive table-striped table-hover align-middle"> <thead>
+	{# Here for add your Code #} {# End of your Code #}
+
+	
+	<h1>Categorie</h1>
+	{# Here for add your Code #} {# End of your Code #}
+
+	<div>
+		<table class="table table-responsive table-striped table-hover align-middle">
+			<thead>
 				<tr>
-					{# Here for add your Code #}
-					{# End of your Code #}
+					{# Here for add your Code #} {# End of your Code #}
 
-						<th>
-							<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'id' ? 'active' }} " href='?tri=id&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'> id</a>
-					</th>
-					<th>
-						<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'nom' ? 'active' }} " href='?tri=nom&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>nom</a>
-					</th>
-					<th>
-						<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'description' ? 'active' }} " href='?tri=description&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>description</a>
-					</th>
-					<th>
-						<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'slug' ? 'active' }} " href='?tri=slug&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>slug</a>
-					</th>
-					{%if action=="deleted" %}
-						<th>
-							<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
-						</th>
-					{% endif %}
-					<th>
-						<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
-					</th>
-					<th>
-						<a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
-					</th>
-					{# Here for add your Code #}
-					{# End of your Code #}
+					<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "id" ? 'active' }} " href='?tri=id&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>id</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "nom" ? 'active' }} " href='?tri=nom&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>nom</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "description" ? 'active' }} " href='?tri=description&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>description</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "article" ? 'active' }} " href='?tri=article&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>article</a></th>
+<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "slug" ? 'active' }} " href='?tri=slug&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>slug</a></th>
+{%if action=="deleted" %}
+    <th>
+    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
+    </th>
+{% endif %}<th>
+    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
+</th><th>
+    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
+</th>
+					{# Here for add your Code #} {# End of your Code #}
+
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody class="sortable">
 				{% for Categorie in categories %}
-					<tr data-num="{{Categorie.id }}">
-						{# Here for add your Code #}
-						{# End of your Code #}<td>
-						{{ Categorie.id}}
-						</td><td>
-						{{ Categorie.nom}}
-						</td><td>
-						{{ Categorie.description}}
-						</td><td>
-						{{ Categorie.slug}}
-						</td>
-							{%if action=="deleted" %}<td>
-							{{ Categorie.deletedAt is not empty ? Categorie.deletedAt|date('d/m à H:i', 'Europe/Paris')}}
-						</td>
-						{% endif %}<td>
-						{{ Categorie.createdAt is not empty ? Categorie.createdAt|date('d/m à H:i', 'Europe/Paris')}}
-						</td><td>
-						{{ Categorie.updatedAt is not empty ? Categorie.updatedAt|date('d/m à H:i', 'Europe/Paris')}}
-						</td>
-						{# Here for add your Code #}
-						{# End of your Code #}
+					{% if true  %}
+						<tr
+							data-num="{{Categorie.id }}">
+							{# Here for add your Code #} {# End of your Code #}
+
+							<td class="my-auto " > {{Categorie.id}}
+</td>
+<td class="my-auto " title="{{Categorie.nom|striptags|u.truncate(20, '...')}}"> {{Categorie.nom|striptags|u.truncate(20, '...')}}
+</td>
+<td class="my-auto " title="{{Categorie.description|striptags|u.truncate(20, '...')}}"> {{Categorie.description|striptags|u.truncate(20, '...')}}
+</td>
+<td>{{ Categorie.createdAt is not empty ? Categorie.createdAt|date('d/m à H:i', 'Europe/Paris')}}</td>
+<td>{{ Categorie.updatedAt is not empty ? Categorie.updatedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
+<td>{{ Categorie.deletedAt is not empty ? Categorie.deletedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
+							{# Here for add your Code #} {# End of your Code #}
+
 							<td>
-							{# Here for add your Code #}
-							{# End of your Code #}
-								<form method="post" data-turbo="false" action="{{ path('categorie_delete', {'id': Categorie.id }) }}" style="margin-block-end: 0;"> <div class="btn-group" role="group" aria-label="actions">
-									{# Here for add your Code #}
-									{# End of your Code #}
-									<input type="hidden" name="_token" value="{{ csrf_token('delete'~Categorie.id ) }}"/> <a class='btn btn-xs btn-primary' data-toggle='tooltip' title='edit' href="{{ path('categorie_edit', {'id': Categorie.id }) }}">
-										<i class='icone icone bi bi-pencil-square'></i>
-									</a>
-									{# Here for add your Code #}
-									{# End of your Code #}
-									{% if true %}
-										{% if action=='deleted' %}
-											{# Here for add your Code #}
-											{# End of your Code #}
-												<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore"> <i class="icone bi bi-life-preserver"></i>
-											</button>
-											<button class="btn btn-xs btn-danger" title="supprimer définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');" name="delete_delete">
-												<i class="icone bi bi-trash"></i>
-											</button>
-										{% else %}
-											{# Here for add your Code #}
-											{# End of your Code #}
-												<button class="btn btn-xs btn-warning" title="mettre dans la corbeille" name="delete_softdelete"> <i class="icone icone bi bi-trash"></i>
-											</button>
+								{# Here for add your Code #} {# End of your Code #}
+
+								<form method="post" action="{{ path('categorie_delete', {'id': Categorie.id }) }}" style="margin-block-end: 0;">
+									<div
+										class="btn-group" role="group" aria-label="actions">
+										{# Here for add your Code #} {# End of your Code #}
+
+										<input type="hidden" name="_token" value="{{ csrf_token('delete'~Categorie.id ) }}"/>
+										<a class='btn btn-xs btn-primary'  title='edit' href="{{ path('categorie_edit', {'id': Categorie.id }) }}"><i class='icone icone bi bi-pencil-square'></i></a>
+										{# Here for add your Code #} {# End of your Code #}
+
+										{% if true %}
+											{% if action=='deleted' %}
+												{# Here for add your Code #} {# End of your Code #}
+
+												<button class="btn btn-xs btn-warning" title="restaurer" name="delete_restore" value="1">
+													<i class="icone bi bi-life-preserver"></i>
+												</button>
+												<button class="btn btn-xs btn-danger" title="supprimer définitivement" onclick="return confirm('Etes-vous sûr de vouloir effacer cet item?');" name="delete_delete" value="1">
+													<i class="icone bi bi-trash"></i>
+												</button>
+											{% else %}
+												{# Here for add your Code #} {# End of your Code #}
+
+												<button class="btn btn-xs btn-warning" title="mettre dans la corbeille" name="delete_softdelete" value="1">
+													<i class="icone icone bi bi-trash"></i>
+												</button>
+											{% endif %}
 										{% endif %}
-									{% endif %}
 
-									{# Here for add your Code #}
-									{# End of your Code #}
+										{# Here for add your Code #} {# End of your Code #}
 
 
-								</div>
-							</form>
-							{# Here for add your Code #}
-							{# End of your Code #}
-						</td>
-					</tr>
+
+									</div>
+								</form>
+								{# Here for add your Code #} {# End of your Code #}
+
+							</td>
+						</tr>
+					{% endif %}
 				{% else %}
 					<tr>
 						<td colspan="11">Aucun enregistrement</td>
@@ -120,8 +110,8 @@ Categorie
 			</tbody>
 		</table>
 	</div>
-	{# Here for add your Code #}
-	{# End of your Code #}
+	{# Here for add your Code #} {# End of your Code #}
+
 	<div class="row">
 		{% if true %}
 			<div class="col">
@@ -140,8 +130,8 @@ Categorie
 			{% endif %}
 		{% endif %}
 	</div>
-	{# Here for add your Code #}
-	{# End of your Code #}
+	{# Here for add your Code #} {# End of your Code #}
+
 
 
 	<nav aria-label="Page navigation ">
@@ -174,14 +164,18 @@ Categorie
 					<a class="page-link" href={{ path('categorie_index',{'page':(pagesMaxi/10)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')} ) }}>{{(pagesMaxi/10)|number_format(0)}}</a>
 				</li>
 			{% else %}
-				{% for item in 1..(pagesMaxi/10)|number_format(0) %}
+				{% set maxi=(pagesMaxi/10)|number_format(0) %}
+
+				{% for item in 1..(maxi==0?1:maxi) %}
 					<li class="page-item">
 						<a class="page-link " href="{{ path('categorie_index',{'page':loop.index,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{loop.index}}</a>
 					</li>
 				{% endfor %}
 			{% endif %}
+
+
 			{# suivant #}
-			<li class="page-item {{ app.request.query.get('page') >= (pagesMaxi/10)|number_format ? 'disabled' }}">
+			<li class="page-item {{ app.request.query.get('page') > (pagesMaxi/10)|number_format ? 'disabled' }}">
 				{% if app.request.query.get('page')==0 %}
 					{% set suivant = 2 %}
 				{% else %}

@@ -17,7 +17,7 @@ class HomeController extends AbstractController
     public function index(Request $request, FixtureHelper $fixtureHelper): Response
     {
         /* ------------------------------- simulateurs ------------------------------ */
-        return $this->render('home/index.html.twig', ['testhelper' => $fixtureHelper::generate(['type' => 'phrase'])]);
+        return $this->render('home/index.html.twig', ['testhelper' => $fixtureHelper::generate('phrase')]);
     }
 
 
