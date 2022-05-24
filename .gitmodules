@@ -33,3 +33,6 @@
 	url = git@github.com:cadot-eu/basetwig.git
 	branch = main
 	path = src/Twig/base
+[submodule "src/Entity/base"]
+	path = src/Entity/base
+	url = https://github.com/cadot-eu/basetraits
