@@ -96,6 +96,7 @@
     "symfony/phpunit-bridge": "^6.0",
     "symfony/stopwatch": "6.*",
     "symfony/web-profiler-bundle": "6.*",
+    "theofidry/psysh-bundle": "^4.5",
     "zenstruck/browser": "^1.1",
     "zenstruck/foundry": "^1.16"
   },
