@@ -36,3 +36,5 @@
 [submodule "src/Entity/base"]
 	path = src/Entity/base
 	url = https://github.com/cadot-eu/basetraits
+	branch = main
+	active = true
