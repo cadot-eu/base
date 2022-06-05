@@ -53,7 +53,7 @@ class CompteRepository extends ServiceEntityRepository implements PasswordUpgrad
      */
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
-        if (! $user instanceof Compte) {
+        if (!$user instanceof Compte) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
@@ -90,4 +90,16 @@ class CompteRepository extends ServiceEntityRepository implements PasswordUpgrad
         ;
     }
     */
+    public function findByRoleAndSituation(string $role)
+    {
+        $role = mb_strtoupper($role);
+
+        return $this->createQueryBuilder('u')
+            ->Where('u.situation = :situation')
+            ->setParameter('situation', 'actif')
+            ->andWhere('JSON_CONTAINS(u.roles, :role) = 1')
+            ->setParameter('role', '"' . $role . '"')
+            ->getQuery()
+            ->getResult();
+    }
 }
