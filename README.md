@@ -15,4 +15,6 @@
     sc d:f:l                                                                                                          
                                                                                                                       
     yarn watch 
+    exit
+    sudo chown www-data: var -R
 ```

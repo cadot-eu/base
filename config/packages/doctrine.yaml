@@ -19,11 +19,11 @@ doctrine:
             string_functions:
                 JSON_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonContains
 
-when@test:
-    doctrine:
-        dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: "_test%env(default::TEST_TOKEN)%"
+# when@test:
+#     doctrine:
+#         dbal:
+#             # "TEST_TOKEN" is typically set by ParaTest
+#             dbname_suffix: "_test%env(default::TEST_TOKEN)%"
 
 when@prod:
     doctrine:

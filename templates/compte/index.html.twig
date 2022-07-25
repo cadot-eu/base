@@ -13,35 +13,38 @@
 
 	{# Here for add your Code #} {# End of your Code #}
 
-	{% set choice_isVerified=["<i class=\"bi bi-toggle-off\"><\/i>","<i class=\"bi bi-toggle-on\"><\/i>"] %}
+	{% set choice_situation={"inactif":"<i class=\"bi bi-toggle-off\"><\/i>","actif":"<i class=\"bi bi-toggle-on\"><\/i>"} %}
+{% set choice_isVerified=["<i class=\"bi bi-toggle-off\"><\/i>","<i class=\"bi bi-toggle-on\"><\/i>"] %}
 
 	<h1>Compte</h1>
 	{# Here for add your Code #} {# End of your Code #}
 
 	<div>
-		<table class="table table-responsive table-striped table-hover align-middle">
+
+		<table class="table table-striped table-hover align-middle">
 			<thead>
 				<tr>
 					{# Here for add your Code #} {# End of your Code #}
 
-					<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "id" ? 'active' }} " href='?tri=id&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>id</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "email" ? 'active' }} " href='?tri=email&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>email</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "roles" ? 'active' }} " href='?tri=roles&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>roles</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "isVerified" ? 'active' }} " href='?tri=isVerified&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>isVerified</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "prixCercueil" ? 'active' }} " href='?tri=prixCercueil&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>prixCercueil</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "prixPerso" ? 'active' }} " href='?tri=prixPerso&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>prixPerso</a></th>
-{%if action=="deleted" %}
-    <th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
-    </th>
-{% endif %}
+					<th {% if pagination.isSorted('a.id') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'id', 'a.id') }}</th>
+<th {% if pagination.isSorted('a.email') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'email', 'a.email') }}</th>
+<th {% if pagination.isSorted('a.roles') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'roles', 'a.roles') }}</th>
+<th {% if pagination.isSorted('a.nom') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'nom', 'a.nom') }}</th>
+<th {% if pagination.isSorted('a.situation') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'situation', 'a.situation') }}</th>
+<th {% if pagination.isSorted('a.isVerified') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'isVerified', 'a.isVerified') }}</th>
 					{# Here for add your Code #} {# End of your Code #}
 
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody class="sortable">
-				{% for Compte in comptes %}
+				{% for Compte in pagination %}
 					{% if true and Compte.roles[0]  != 'ROLE_SUPERADMIN' %}
 						<tr
 							data-num="{{Compte.id }}">
@@ -49,9 +52,25 @@
 
 							<td class="my-auto " > {{Compte.id}}
 </td>
-<td class="my-auto " title="{{Compte.email|striptags|u.truncate(20, '...')}}"> {{Compte.email|striptags|u.truncate(20, '...')}}
+<td class="my-auto " title="{{Compte.email|striptags|u.truncate(200, '...')}}"> {{Compte.email|striptags|u.truncate(40, '...')}}
 </td>
 <td class="my-auto " title="{{Compte.roles|join(',')}}"> {{Compte.roles|join(',')}}
+</td>
+<td class="my-auto " title="{{Compte.nom|striptags|u.truncate(200, '...')}}"> {{Compte.nom|striptags|u.truncate(40, '...')}}
+</td>
+<td class="my-auto">
+                                {% set retour=0 %}
+                                {% for test,value in choice_situation %}
+                                    {% if test==Compte.situation %}
+                                        {% set retour=loop.index0 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if retour+1==choice_situation|length %}
+                                    {% set numr=0 %}
+                                {% else %}
+                                    {% set numr=retour+1 %}
+                                {% endif %}
+                                <a href="{{path('compte_champ',{'id':Compte.id,'type':'situation','valeur':choice_situation|keys[numr]})}}" style='font-size:2rem;'  title='{{ choice_situation|keys[retour]}}'> {{ choice_situation[ choice_situation|keys[retour]]|raw}}</a>
 </td>
 <td class="my-auto">
                                 {% set retour=0 %}
@@ -65,7 +84,7 @@
                                 {% else %}
                                     {% set numr=retour+1 %}
                                 {% endif %}
-                                <a href="{{path('compte_etat',{'id':Compte.id,'type':'isVerified','valeur':choice_isVerified|keys[numr]})}}" style='font-size:2rem;'  title='{{ choice_isVerified|keys[retour]}}'> {{ choice_isVerified[ choice_isVerified|keys[retour]]|raw}}</a>
+                                <a href="{{path('compte_champ',{'id':Compte.id,'type':'isVerified','valeur':choice_isVerified|keys[numr]})}}" style='font-size:2rem;'  title='{{ choice_isVerified|keys[retour]}}'> {{ choice_isVerified[ choice_isVerified|keys[retour]]|raw}}</a>
 </td>
 <td>{{ Compte.deletedAt is not empty ? Compte.deletedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
 							{# Here for add your Code #} {# End of your Code #}
@@ -142,59 +161,10 @@
 	</div>
 	{# Here for add your Code #} {# End of your Code #}
 
+	<div class="row">
+		<div class="navigation col-auto mx-auto">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+	</div>
 
-
-	<nav aria-label="Page navigation ">
-		<ul
-			class="pagination justify-content-center">
-			{# precedent #}
-			<li class="page-item {{ app.request.query.get('page')==1 or app.request.query.get('page')==0 ? 'disabled' }} ">
-				{% if app.request.query.get('page') is defined and app.request.query.get('page')>1 %}
-					{% set precedent = app.request.query.get('page') -1 %}
-				{% else %}
-					{% set precedent = 1 %}
-				{% endif %}
-				<a class="page-link" href="{{ path('compte_index',{'page':precedent,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-			{% if pagesMaxi/10>6 %}
-				{# 1 #}
-				<li class="page-item">
-					<a class="page-link" href="{{ path('compte_index',{'page':1,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">1</a>
-				</li>
-				{# pages millieu #}
-				{% for item in 1..5 %}
-					<li class="page-item">
-						<a class="page-link " href="{{ path('compte_index',{'page':(pagesMaxi/10/6*loop.index)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{(pagesMaxi/10/6*loop.index)|number_format(0)}}</a>
-					</li>
-				{% endfor %}
-				{# maxi #}
-				<li class="page-item">
-					<a class="page-link" href={{ path('compte_index',{'page':(pagesMaxi/10)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')} ) }}>{{(pagesMaxi/10)|number_format(0)}}</a>
-				</li>
-			{% else %}
-				{% set maxi=(pagesMaxi/10)|number_format(0) %}
-
-				{% for item in 1..(maxi==0?1:maxi) %}
-					<li class="page-item">
-						<a class="page-link " href="{{ path('compte_index',{'page':loop.index,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{loop.index}}</a>
-					</li>
-				{% endfor %}
-			{% endif %}
-
-
-			{# suivant #}
-			<li class="page-item {{ app.request.query.get('page') > (pagesMaxi/10)|number_format ? 'disabled' }}">
-				{% if app.request.query.get('page')==0 %}
-					{% set suivant = 2 %}
-				{% else %}
-					{% set suivant = app.request.query.get('page') +1 %}
-				{% endif %}
-				<a class="page-link" href="{{ path('compte_index',{'page':suivant,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		</ul>
-	</nav>
-{%endblock %}
+</div>{%endblock %}

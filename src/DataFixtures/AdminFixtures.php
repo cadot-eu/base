@@ -50,13 +50,11 @@ class AdminFixtures extends Fixture
         $parametres = new Parametres();
         $parametres->setNom("Mail: Email d'envoie");
         $parametres->setValeur("contact@cadot.eu");
-        $parametres->setType('simple');
         $manager->persist($parametres);
 
         $parametres = new Parametres();
         $parametres->setNom("Mail: Nom d'envoie");
         $parametres->setValeur("Enteprise ...");
-        $parametres->setType('simple');
         $manager->persist($parametres);
 
         $docs = ['Mentions légales' => [], 'Conditions générales de vente' => [],  'Livraisons et retours' => []]; //['type' => 'simplelanguage', 'text' => '', 'aide' => '']
@@ -64,7 +62,7 @@ class AdminFixtures extends Fixture
             $type = isset($tab['type']) ? $tab['type'] : '';
             $text = isset($tab['text']) ? $tab['text'] : '';
             $aide = isset($tab['aide']) ? $tab['aide'] : '';
-            ParametresFactory::new()->createOne(['nom' => $doc, 'type' => $type, 'valeur' => $text, 'aide' => $aide]);
+            ParametresFactory::new()->createOne(['nom' => $doc,  'valeur' => $text, 'aide' => $aide]);
         }
 
         /* -------------------------------------------------------------------------- */

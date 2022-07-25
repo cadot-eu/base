@@ -8,7 +8,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 //Here for add your Code //end of your code
 
 class CompteType extends AbstractType
@@ -33,22 +32,27 @@ array (
   array (
     'client' => 'ROLE_USER',
     'administrateur' => 'ROLE_ADMIN',
+    'partenaire' => 'ROLE_PARTENAIRE',
   ),
   'attr' => 
   array (
-    'data-controller' => 'base--onecheckbox',
   ),
 ))
-
-->add('prixCercueil',MoneyType::class,
+->add('nom',null,
 array (
   'attr' => 
   array (
   ),
 ))
 
-->add('prixPerso',MoneyType::class,
+->add('situation',ChoiceType::class,
 array (
+  'expanded' => true,
+  'choices' => 
+  array (
+    'inactif' => 'inactif',
+    'actif' => 'actif',
+  ),
   'attr' => 
   array (
   ),

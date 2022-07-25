@@ -24,8 +24,22 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 target: home_index
+            remember_me:
+                secret: "%kernel.secret%" # required
+                lifetime: 604800 # 1 week in seconds
+                signature_properties: ["password", "updatedAt"] # cookies supprimr si password ou updatedAt chang
+                token_provider: #mise en base de données du cookie
+                    doctrine: true
+
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/admin/parametres/new, roles: ROLE_SUPERADMIN }
-        - { path: ^/admin, roles: ROLE_USER }
+        - { path: /admin/parametres/new, roles: ROLE_SUPERADMIN }
+        - { path: /admin/groupe, roles: [ROLE_PARTENAIRE, ROLE_SUPERADMIN] }
+        - { path: /admin/produit, roles: [ROLE_PARTENAIRE, ROLE_SUPERADMIN] }
+        - { path: /admin/mon-compte, roles: [ROLE_PARTENAIRE, ROLE_SUPERADMIN] }
+        - {
+              path: /admin/accueil,
+              roles: [ROLE_ADMIN, ROLE_SUPERADMIN, ROLE_PARTENAIRE],
+          }
+        - { path: /admin/*, roles: [ROLE_ADMIN, ROLE_SUPERADMIN] }
         # - { path: ^/profile, roles: ROLE_USER }

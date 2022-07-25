@@ -2,13 +2,17 @@
 
 namespace App\Entity;
 
-use App\Entity\TimeTrait;
 use App\Repository\ParametresRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\base\TimeTrait;
+use App\Twig\base\AllExtension;
+use Symfony\Component\DomCrawler\Crawler;
+use App\Service\base\HtmlHelper;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 #[ORM\Entity(repositoryClass: ParametresRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
@@ -29,25 +33,40 @@ class Parametres
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
+    /**
+     * attr:{"data-controller" : "base--ckeditor"}
+     * attr:{"data-base--ckeditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypenom()§"}
+     */
     private $nom;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    /*TWIG=striptags|u.truncate(20, '...') */
+    /**
+     * attr:{"data-controller" : "base--ckeditor"}
+     * attr:{"data-base--ckeditor-toolbar-value": "§$AtypeOption[\"data\"]->getTypevaleur()§"}
+     */
     private $valeur;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     /**
-     * ATTR:{"disabled":true}
+     * readonlyroot
+     * TPL:no_index
      */
 
     private $aide;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     /**
-     * hidden
+     * hiddenroot
      * TPL:no_index
      */
-    private $type;
+    private $typenom;
+
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    /**
+     * hiddenroot
+     * TPL:no_index
+     */
+    private $typevaleur;
 
     public function getId(): ?int
     {
@@ -62,7 +81,6 @@ class Parametres
     public function setNom(string $nom): self
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -94,15 +112,54 @@ class Parametres
         return $this;
     }
 
-    public function getType(): ?string
+    public function getTypenom(): ?string
     {
-        return $this->type;
+        return $this->typenom;
     }
 
-    public function setType(?string $type): self
+    public function setTypenom(?string $typenom): self
     {
-        $this->type = $type;
+        $this->typenom = $typenom;
 
+        return $this;
+    }
+
+    public function getTypevaleur(): ?string
+    {
+        return $this->typevaleur;
+    }
+
+    public function setTypevaleur(?string $typevaleur): self
+    {
+        $this->typevaleur = $typevaleur;
+
+        return $this;
+    }
+
+
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Gedmo\Slug(fields: ["nom"], unique: true, updatable: true)]
+    /** 
+     * hiddenroot
+     * OPT:{"required":false} 
+     * OPT:{"label":"lien"} 
+     */
+    private $slug;
+    public function getSlug(): ?string
+    {
+        if ($this->slug == null) {
+            $slugger = new AsciiSlugger('fr');
+            $slug = strtolower($slugger->slug($this->nom));
+        }
+        return $this->slug;
+    }
+    public function setSlug(?string $slug): self
+    {
+        if ($slug == null) {
+            $slugger = new AsciiSlugger('fr');
+            $slug = strtolower($slugger->slug($this->nom));
+        }
+        $this->slug = $slug;
         return $this;
     }
 }

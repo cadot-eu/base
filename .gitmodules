@@ -35,6 +35,26 @@
 	path = src/Twig/base
 [submodule "src/Entity/base"]
 	path = src/Entity/base
-	url = https://github.com/cadot-eu/basetraits
+	url = git@github.com:cadot-eu/basetraits
 	branch = main
 	active = true
+[submodule "src/EventListener/base"]
+	path = src/EventListener/base
+	url = git@github.com:cadot-eu/baselisteners.git
+    branch = main
+    active = true
+[submodule "templates/base"]
+	path = templates/base
+	url = git@github.com:cadot-eu/basetemplate.git
+	branch=main
+	active=true
+[submodule "src/Controller/base"]
+	path = src/Controller/base
+	url = git@github.com:cadot-eu/basecontroller.git
+        branch=main
+        active=true
+[submodule "tests/basetests"]
+        path = tests/basetests
+        url = git@github.com:cadot-eu/basetests.git
+        branch=main
+        active=true

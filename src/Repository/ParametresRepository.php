@@ -49,18 +49,7 @@ class ParametresRepository extends ServiceEntityRepository
     //  * @return Parametres[] Returns an array of Parametres objects
     //  */
     /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+  
 
     /*
     public function findOneBySomeField($value): ?Parametres
@@ -73,4 +62,32 @@ class ParametresRepository extends ServiceEntityRepository
         ;
     }
     */
-}
+
+  public function index($search, $fields, $sort, $direction = 'ASC', $deleted = false, $etat = null)
+  {
+      $sort = is_null($sort) ? 'a.id' : $sort;
+      $fields = $fields == null ? ['id'] : []; //premier array à compléter
+      $qb = $this->createQueryBuilder('a');
+      if ($deleted) {
+          $qb->where($qb->expr()->isNotNull('a.deletedAt'));
+      } else {
+          $qb->where($qb->expr()->isNull('a.deletedAt'));
+      }
+      if ($etat != null) {
+          $qb->andwhere($qb->expr()->eq('a.etat', ':etat'))
+              ->setParameter('etat', $etat);
+      }
+      $ORX = $qb->expr()->orx();
+      foreach ($fields as $field) {
+          $ors = [];
+          foreach (explode(' ', $search) as $s) {
+              $s = str_replace("'", "''", $s);
+              $ors[] = $qb->expr()->orx("a.$field LIKE '%$s%' ");
+          }
+          $ORX->add(join(' AND ', $ors));
+      }
+      $qb->andWhere($ORX);
+      return $qb->orderBy($sort, $direction)
+          ->getQuery()
+          ->getResult();
+  }}

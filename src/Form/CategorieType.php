@@ -18,13 +18,7 @@ class CategorieType extends AbstractType
     {
         //Here for add your Code //end of your code
 
-         $builder->add('id',null,
-array (
-  'attr' => 
-  array (
-  ),
-))
-->add('nom',null,
+         $builder->add('nom',null,
 array (
   'attr' => 
   array (
@@ -50,12 +44,16 @@ array (
 ))
 ->add('createdAt',null,
 array (
+  'label' => 'Créé le',
+  'widget' => 'single_text',
   'attr' => 
   array (
   ),
 ))
 ->add('updatedAt',null,
 array (
+  'label' => 'Mis à jour le',
+  'widget' => 'single_text',
   'attr' => 
   array (
   ),

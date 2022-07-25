@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\base\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 //Here for add your Code //end of your code
 
 #[Route('/admin/compte')]
@@ -39,21 +40,17 @@ class CompteController extends AbstractController
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
     #[Route('/', name: 'compte_index', methods: ['GET'])]
-    public function index(CompteRepository $compteRepository, Request $request): Response
+    public function index(CompteRepository $compteRepository, Request $request, PaginatorInterface $paginator): Response
     {
         //Here for add your Code //end of your code
 
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($compteRepository->findBy(['deletedAt' => null]));
-        if ($maxi > 10 && $page * 10  > $maxi) $page = round($maxi / 10, 0);
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
-        $comptes = $compteRepository->findBy(['deletedAt' => null], $tri, 10, ($page - 1) * 10);
+        $dql   = "SELECT a FROM App:Compte a WHERE a.deletedAt is NULL";
+        $query = $this->em->createQuery($dql);
         //Here for add your Code //end of your code
 
         return $this->render('/compte/index.html.twig', [
             /*¤index_render¤*/
-            'comptes' => $comptes,
-            'pagesMaxi' => $maxi
+            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
         ]);
         //Here for add your Code //end of your code
 
@@ -64,40 +61,28 @@ class CompteController extends AbstractController
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
     #[Route('/deleted', name: 'compte_deleted', methods: ['GET'])]
-    public function deleted(CompteRepository $compteRepository, Request $request): Response
+    public function deleted(CompteRepository $compteRepository, Request $request, PaginatorInterface $paginator): Response
     {
         //Here for add your Code //end of your code
 
-        $tabComptes = [];
-        foreach ($compteRepository->findAll() as $compte) {
-            if ($compte->getDeletedAt() != null) $tabComptes[] = $compte;
-        }
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($tabComptes);
-        if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
-        if ($page == 0) $page = 1;
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
-        $comptes = array_slice($tabComptes, ($page - 1) * 10, 10);
-
-
+        $dql   = "SELECT a FROM App:Compte a WHERE a.deletedAt is not NULL";
+        $query = $this->em->createQuery($dql);
         //Here for add your Code //end of your code
 
         return $this->render('/compte/index.html.twig', [
-            //Here for add your Code //end of your code
-
-            'comptes' => $tabComptes,
-            'pagesMaxi' => $maxi
+            /*¤index_render¤*/
+            'pagination' =>$paginator->paginate($query,$request->query->getInt('page', 1),8)
         ]);
     }
     //Here for add your Code //end of your code
 
     /* -------------------------------------------------------------------------- */
-    /*                                    ETAT                                    */
+    /*                                    CHAMP                                    */
     /* -------------------------------------------------------------------------- */
     /**
-     * @Route("/etat/{id}/{type}/{valeur}", name="compte_etat", methods={"GET"})
+     * @Route("/champ/{id}/{type}/{valeur}", name="compte_champ", methods={"GET"})
      */
-    public function etat(Compte $compte, $type = null, $valeur = null): Response
+    public function champ(Compte $compte, $type = null, $valeur = null): Response
     {
         //Here for add your Code //end of your code
 
@@ -156,12 +141,22 @@ class CompteController extends AbstractController
                                 }
                             }
                         } else {
-                            $fichierName = $fileUploader->upload($fichier, "compte/$name/");
-                            $function = 'set' . $name;
-                            $compte->$function($fichierName);
+                           
+                                $fichierName = $fileUploader->upload($fichier, "compte/$name/");
+                                $function = 'set' . $name;
+                                $compte->$function($fichierName);
                         }
                         //Here for add your Code //end of your code
 
+                    }
+                    //delete value
+                    else
+                    {
+                         if($request->get("compte_" . $name)=='à retirer')
+                                {
+                         $function = 'set' . $name;
+                         $compte->$function('');
+                         }
                     }
                     //Here for add your Code //end of your code
 
@@ -210,12 +205,8 @@ class CompteController extends AbstractController
 
         $compte = clone $comptec;
         if (property_exists($compte, 'slug')) {
-            $sfunc = 'set' . ucfirst('');
-            $gfunc = 'get' . ucfirst('');
-            $compte->$sfunc($compte->$gfunc() . uniqid());
-            $compte->setslug();
+            $compte->setslug($comptec->getslug().uniqid());
         }
-        $em = $this->getDoctrine()->getManager();
         $compte->setCreatedAt(new DateTime('now'));
         $em->persist($compte);
         $em->flush();

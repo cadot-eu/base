@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Entity\TimeTrait;
 use App\Repository\CompteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -11,13 +12,24 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\base\TimeTrait;
+use App\Entity\base\EtatTrait;
+use App\Entity\base\VerifiedTrait;
+use App\Entity\base\ActifTrait;
+use App\Entity\base\SituationTrait;
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
+#[UniqueEntity(fields: ['email'], message: 'Merci de contacter picbleu andre@picbleu.fr')]
+/**
+ * crud type
+ */
 class Compte implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimeTrait;
+    use SituationTrait;
+    use VerifiedTrait;
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: Types::INTEGER)]
     /**
      * HIDE:{"roles[0]":"ROLE_SUPERADMIN"}
@@ -32,14 +44,13 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::JSON)]
     /**
      * choice
-     * options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN"}
+     * options:{"client":"ROLE_USER","administrateur":"ROLE_ADMIN","partenaire":"ROLE_PARTENAIRE"}
      * TWIG:join(',')
      * OPT:{"multiple":true,"expanded":true}
-     * ATTR:{"data-controller":"base--onecheckbox"}
      */
     private $roles = [];
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     /**
      * TPL:no_index
      * TPL:no_form
@@ -47,25 +58,10 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
 
-    #[ORM\Column(type: Types::BOOLEAN)]
-    /**
-     * choiceenplace
-     * options:{"0":"<i class=\"bi bi-toggle-off\"></i>","1":"<i class=\"bi bi-toggle-on\"></i>"}
-     * TPL:no_form
-     */
-    private $isVerified = false;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $nom;
 
-    #[ORM\Column(type: 'string', length: 15, nullable: true)]
-    /**
-     * money
-     */
-    private $prixCercueil;
 
-    #[ORM\Column(type: 'string', length: 15, nullable: true)]
-    /**
-     * money
-     */
-    private $prixPerso;
 
     public function getId(): ?int
     {
@@ -106,13 +102,15 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
+
+
         $this->password = $password;
 
         return $this;
@@ -124,38 +122,16 @@ class Compte implements UserInterface, PasswordAuthenticatedUserInterface
         // $this->plainPassword = null;
     }
 
-    public function isVerified(): bool
+
+
+    public function getNom(): ?string
     {
-        return $this->isVerified;
+        return $this->nom;
     }
 
-    public function setIsVerified(bool $isVerified): self
+    public function setNom(?string $nom): self
     {
-        $this->isVerified = $isVerified;
-
-        return $this;
-    }
-
-    public function getPrixCercueil(): ?string
-    {
-        return $this->prixCercueil;
-    }
-
-    public function setPrixCercueil(?string $prixCercueil): self
-    {
-        $this->prixCercueil = $prixCercueil;
-
-        return $this;
-    }
-
-    public function getPrixPerso(): ?string
-    {
-        return $this->prixPerso;
-    }
-
-    public function setPrixPerso(?string $prixPerso): self
-    {
-        $this->prixPerso = $prixPerso;
+        $this->nom = $nom;
 
         return $this;
     }

@@ -18,45 +18,43 @@
 	{# Here for add your Code #} {# End of your Code #}
 
 	<div>
-		<table class="table table-responsive table-striped table-hover align-middle">
+		{{ knp_pagination_filter(pagination, {
+                    'r.recherche': 'Recherche',
+                }) }}
+		{% if pagination.getTotalItemCount>0  %}
+			<div>
+				{{ pagination.getTotalItemCount }}
+				trouvé</div>
+		{% endif %}
+		<table class="table table-striped table-hover align-middle">
 			<thead>
 				<tr>
 					{# Here for add your Code #} {# End of your Code #}
 
-					<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "id" ? 'active' }} " href='?tri=id&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>id</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "nom" ? 'active' }} " href='?tri=nom&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>nom</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "description" ? 'active' }} " href='?tri=description&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>description</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "article" ? 'active' }} " href='?tri=article&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>article</a></th>
-<th><a class="btn btn-outline-primary {{ app.request.query.get("tri") == "slug" ? 'active' }} " href='?tri=slug&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>slug</a></th>
-{%if action=="deleted" %}
-    <th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'deletedAt' ? 'active' }} " href='?tri=deletedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>effacé</a>
-    </th>
-{% endif %}<th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'createdAt' ? 'active' }} " href='?tri=createdAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>créé</a>
-</th><th>
-    <a class="btn btn-outline-primary {{ app.request.query.get(" tri") == 'updatedAt' ? 'active' }} " href='?tri=updatedAt&&ordre={{ app.request.query.get("ordre")=="DESC" ? "ASC":"DESC" }}'>modifié</a>
-</th>
+					<th {% if pagination.isSorted('a.id') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'id', 'a.id') }}</th>
+<th {% if pagination.isSorted('a.nom') %} class='sorted'{% endif %}>
+                {{ knp_pagination_sortable(pagination, 'nom', 'a.nom') }}</th>
 					{# Here for add your Code #} {# End of your Code #}
 
 					<th>Actions</th>
 				</tr>
 			</thead>
 			<tbody class="sortable">
-				{% for Categorie in categories %}
+				{% for Categorie in pagination %}
+					{# Here for add your Code #} {# End of your Code #}
+
 					{% if true  %}
+						{# Here for add your Code #} {# End of your Code #}
+
 						<tr
 							data-num="{{Categorie.id }}">
 							{# Here for add your Code #} {# End of your Code #}
 
-							<td class="my-auto " > {{Categorie.id}}
+							<td class="my-auto " > {{Categorie.id|raw}}
 </td>
-<td class="my-auto " title="{{Categorie.nom|striptags|u.truncate(20, '...')}}"> {{Categorie.nom|striptags|u.truncate(20, '...')}}
+<td class="my-auto " title="{{Categorie.nom|striptags|u.truncate(200, '...')}}"> {{Categorie.nom|striptags|u.truncate(40, '...')}}
 </td>
-<td class="my-auto " title="{{Categorie.description|striptags|u.truncate(20, '...')}}"> {{Categorie.description|striptags|u.truncate(20, '...')}}
-</td>
-<td>{{ Categorie.createdAt is not empty ? Categorie.createdAt|date('d/m à H:i', 'Europe/Paris')}}</td>
-<td>{{ Categorie.updatedAt is not empty ? Categorie.updatedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
 <td>{{ Categorie.deletedAt is not empty ? Categorie.deletedAt|date('d/m à H:i', 'Europe/Paris')}}</td>
 							{# Here for add your Code #} {# End of your Code #}
 
@@ -101,7 +99,11 @@
 
 							</td>
 						</tr>
+						{# Here for add your Code #} {# End of your Code #}
+
 					{% endif %}
+					{# Here for add your Code #} {# End of your Code #}
+
 				{% else %}
 					<tr>
 						<td colspan="11">Aucun enregistrement</td>
@@ -132,59 +134,10 @@
 	</div>
 	{# Here for add your Code #} {# End of your Code #}
 
+	<div class="row">
+		<div class="navigation col-auto mx-auto">
+			{{ knp_pagination_render(pagination) }}
+		</div>
+	</div>
 
-
-	<nav aria-label="Page navigation ">
-		<ul
-			class="pagination justify-content-center">
-			{# precedent #}
-			<li class="page-item {{ app.request.query.get('page')==1 or app.request.query.get('page')==0 ? 'disabled' }} ">
-				{% if app.request.query.get('page') is defined and app.request.query.get('page')>1 %}
-					{% set precedent = app.request.query.get('page') -1 %}
-				{% else %}
-					{% set precedent = 1 %}
-				{% endif %}
-				<a class="page-link" href="{{ path('categorie_index',{'page':precedent,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
-					<span aria-hidden="true">&laquo;</span>
-				</a>
-			</li>
-			{% if pagesMaxi/10>6 %}
-				{# 1 #}
-				<li class="page-item">
-					<a class="page-link" href="{{ path('categorie_index',{'page':1,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">1</a>
-				</li>
-				{# pages millieu #}
-				{% for item in 1..5 %}
-					<li class="page-item">
-						<a class="page-link " href="{{ path('categorie_index',{'page':(pagesMaxi/10/6*loop.index)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{(pagesMaxi/10/6*loop.index)|number_format(0)}}</a>
-					</li>
-				{% endfor %}
-				{# maxi #}
-				<li class="page-item">
-					<a class="page-link" href={{ path('categorie_index',{'page':(pagesMaxi/10)|number_format(0),'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')} ) }}>{{(pagesMaxi/10)|number_format(0)}}</a>
-				</li>
-			{% else %}
-				{% set maxi=(pagesMaxi/10)|number_format(0) %}
-
-				{% for item in 1..(maxi==0?1:maxi) %}
-					<li class="page-item">
-						<a class="page-link " href="{{ path('categorie_index',{'page':loop.index,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">{{loop.index}}</a>
-					</li>
-				{% endfor %}
-			{% endif %}
-
-
-			{# suivant #}
-			<li class="page-item {{ app.request.query.get('page') > (pagesMaxi/10)|number_format ? 'disabled' }}">
-				{% if app.request.query.get('page')==0 %}
-					{% set suivant = 2 %}
-				{% else %}
-					{% set suivant = app.request.query.get('page') +1 %}
-				{% endif %}
-				<a class="page-link" href="{{ path('categorie_index',{'page':suivant,'tri':app.request.query.get('tri'),'ordre':app.request.query.get('ordre')}) }}">
-					<span aria-hidden="true">&raquo;</span>
-				</a>
-			</li>
-		</ul>
-	</nav>
-{%endblock %}
+</div>{%endblock %}

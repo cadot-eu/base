@@ -1,96 +1,83 @@
-{# Here for add your Code #}
-{# End of your Code #}
+{# Here for add your Code #} {# End of your Code #}
 {% extends '/admin/base.html.twig' %}
 {% set route = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) %}
 {% set action = path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')) | split('/') |
 last %}
-{# Here for add your Code #}
-{# End of your Code #}
+{# Here for add your Code #} {# End of your Code #}
 
-    {% block title %}
-        {% if action=='new' %}
-        Création
-    {% elseif action=='copy' %}
-        Duplication
-    {% elseif action=='edit' %}
-        Edition
-    {% endif %}
-    Parametres
+{% block title %}
+	{% if action=='new' %}Création
+		{% elseif action=='copy' %}Duplication
+		{% elseif action=='edit' %}Edition
+	{% endif %}
+	Parametres
 {% endblock %}
 
 {% block body %}
-    <input type="hidden" id="TBuploadmax" value="{{ TBuploadmax() }}">
-        {# Here for add your Code #}
-        {# End of your Code #}
+	<input
+	type="hidden" id="TBuploadmax" value="{{TBuploadmax()}}">
+	{# Here for add your Code #} {# End of your Code #}
 
-            <div class="\" col-12 text-center\""> <h1>
-                {% if action=='new' %}Créer
-                    {% elseif action=='copy' %}Dupliquer
-                    {% elseif action=='edit' %}Editer
-                {% endif %}
-                Parametres
-                <span
-                    class="text-right">{# <h5>taille maxi d'envoie:<span id="TBuploadmax">{{TBuploadmax()}}</span>Mo</h5> #}
-                </span>
-            </h1>
-            {# Here for add your Code #}
-            {# End of your Code #}
+	<div class="\" col-12 text-center\"">
+		<h1>
+			{% if action=='new' %}Créer
+				{% elseif action=='copy' %}Dupliquer
+				{% elseif action=='edit' %}Editer
+			{% endif %}
+			Parametres
+			<span
+				class="text-right">{# <h5>taille maxi d'envoie:<span id="TBuploadmax">{{TBuploadmax()}}</span>Mo</h5> #}
+			</span>
+		</h1>
+		{# Here for add your Code #} {# End of your Code #}
 
-        </div>
-        {# Here for add your Code #}
-        {# End of your Code #}
+	</div>
+	{# Here for add your Code #} {# End of your Code #}
 
-        <div class="col-12" data-turbo="false">
-            {{ form_start(form) }}
-            {# Here for add your Code #}
-            {# End of your Code #}
+	<div class="col-12" data-turbo="false">
+		{{ form_start(form) }}
+		{# Here for add your Code #} {# End of your Code #}
 
-            {{ form_row(form.nom) }}
+		{{ form_row(form.nom) }}
 
-            {# Here for add your Code #}
-                {% if form.type.vars.value=='simplelanguage' %}
-                {{ form_row(form.valeur,{'attr':{'data-base--ckeditor-toolbar-value':'simplelanguage' }}
-                ) }}
-            {% elseif form.type.vars.value=='simple' %}
-                {{ form_row(form.valeur,{'attr':{'data-base--ckeditor-toolbar-value':'simple' }}
-                ) }}
-            {% else %}
+{# Here for add your Code #} {# End of your Code #}
 
-                {# End of your Code #}
+{{ form_row(form.valeur) }}
 
-                {{ form_row(form.valeur) }}
+{# Here for add your Code #} {# End of your Code #}
 
-                {# Here for add your Code #}
-            {% endif %}
-            {# End of your Code #}
+{{ form_row(form.aide) }}
 
-            {{ form_row(form.aide) }}
+{# Here for add your Code #} {# End of your Code #}
 
-            {# Here for add your Code #}
-            {# End of your Code #}
+{{ form_row(form.typenom) }}
 
-            {{ form_row(form.type) }}
+{# Here for add your Code #} {# End of your Code #}
 
-            {# Here for add your Code #}
-            {# End of your Code #}
+{{ form_row(form.typevaleur) }}
 
-                <button class="btn btn-primary" id="bouton_submit" type="submit"> {% if action=='new' %}Créer
-                    {% else %}Mettre à jour
-                {% endif %}
-            </button>
-            <a href="{{ path('parametres_index') }}">
-                <button class="btn btn-secondary" type="button">Revenir à la liste</button>
-            </a>
-            <input type="hidden" id="token" value="{{ csrf_token('upload') }}"/>
-            {# Here for add your Code #}
-            {# End of your Code #}
+{# Here for add your Code #} {# End of your Code #}
 
-        {{ form_end(form) }}
-            {# Here for add your Code #}
-            {# End of your Code #}
+{{ form_row(form.slug) }}
 
-        </div>
-        {# Here for add your Code #}
-        {# End of your Code #}
+		{# Here for add your Code #} {# End of your Code #}
 
-    {% endblock %}
+		<button class="btn btn-primary" id="bouton_submit" type="submit">
+			{% if action=='new' %}Créer
+				{% else %}Mettre à jour
+			{% endif %}
+		</button>
+		<a href="{{ path('parametres_index') }}">
+			<button class="btn btn-secondary" type="button">Revenir à la liste</button>
+		</a>
+		<input
+		type="hidden" id="token" value="{{ csrf_token('upload')}}"/>
+		{# Here for add your Code #} {# End of your Code #}
+
+		{{ form_end(form) }}
+		{# Here for add your Code #} {# End of your Code #}
+
+	</div>
+	{# Here for add your Code #} {# End of your Code #}
+
+{% endblock %}

@@ -2,34 +2,29 @@
 
 namespace App\Entity;
 
-use App\Entity\TimeTrait;
 use App\Repository\CategorieRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\DBAL\Types\Types;
+use App\Entity\base\TimeTrait;
+use App\Entity\base\VuesTrait;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ORM\HasLifecycleCallbacks()]
 class Categorie
 {
     use TimeTrait;
-
+    use VuesTrait;
     #[ORM\Id, ORM\GeneratedValue, ORM\Column(type: Types::INTEGER)]
+    /**
+     * tpl:no_created
+     * tpl:no_updated
+     */
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     private $nom;
-
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private $description;
-
-
-    private $article;
-
-    #[Gedmo\Slug(fields: ["nom"], unique: true, updatable: true)]
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private $slug;
 
     public function getId(): ?int
     {
@@ -48,39 +43,23 @@ class Categorie
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
 
-    public function setDescription(?string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    public function getArticle(): ?Article
-    {
-        return $this->article;
-    }
-
-    public function setArticle(?Article $article): self
-    {
-        $this->article = $article;
-
-        return $this;
-    }
-
+    #[ORM\Column(type: Types::STRING, length: 255)]
+    #[Gedmo\Slug(fields: ["nom"], unique: true, updatable: true)]
+    /** 
+     * TPL:no_index
+     * OPT:{"disabled":true}
+     * OPT:{"required":false} 
+     * OPT:{"label":"url"} 
+     */
+    private $slug;
     public function getSlug(): ?string
     {
         return $this->slug;
     }
-
-    public function setSlug(string $slug): self
+    public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
-
         return $this;
     }
 }

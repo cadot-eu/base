@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Service\base\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 //Here for add your Code //end of your code
 
 #[Route('/admin/parametres')]
@@ -39,21 +40,16 @@ class ParametresController extends AbstractController
     /*                                    INDEX                                   */
     /* -------------------------------------------------------------------------- */
     #[Route('/', name: 'parametres_index', methods: ['GET'])]
-    public function index(ParametresRepository $parametresRepository, Request $request): Response
+    public function index(ParametresRepository $parametresRepository, Request $request, PaginatorInterface $paginator): Response
     {
         //Here for add your Code //end of your code
 
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($parametresRepository->findBy(['deletedAt' => null]));
-        if ($maxi > 10 && $page * 10  > $maxi) $page = round($maxi / 10, 0);
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
-        $parametress = $parametresRepository->findBy(['deletedAt' => null], $tri, 10, ($page - 1) * 10);
+        $dql = $parametresRepository->index($request->query->get('filterValue', ''),null, $request->query->get('sort'), $request->query->get('direction'),false);
         //Here for add your Code //end of your code
 
         return $this->render('/parametres/index.html.twig', [
             /*¤index_render¤*/
-            'parametress' => $parametress,
-            'pagesMaxi' => $maxi
+            'pagination' =>$paginator->paginate($dql, $request->query->getInt('page', 1))
         ]);
         //Here for add your Code //end of your code
 
@@ -64,40 +60,28 @@ class ParametresController extends AbstractController
     /*                                   DELETED                                  */
     /* -------------------------------------------------------------------------- */
     #[Route('/deleted', name: 'parametres_deleted', methods: ['GET'])]
-    public function deleted(ParametresRepository $parametresRepository, Request $request): Response
+    public function deleted(ParametresRepository $parametresRepository, Request $request, PaginatorInterface $paginator): Response
     {
         //Here for add your Code //end of your code
 
-        $tabParametress = [];
-        foreach ($parametresRepository->findAll() as $parametres) {
-            if ($parametres->getDeletedAt() != null) $tabParametress[] = $parametres;
-        }
-        $page = $request->query->get("page") != null ? $request->query->get("page") : 1;
-        $maxi = count($tabParametress);
-        if ($page * 10  > $maxi) $page = round($maxi / 10, 0);
-        if ($page == 0) $page = 1;
-        $tri = $request->query->get("tri") != null ? [$request->query->get("tri") => $request->query->get("ordre") ?: 'ASC'] : [];
-        $parametress = array_slice($tabParametress, ($page - 1) * 10, 10);
-
-
+         $dql = $parametresRepository->index($request->query->get('filterValue', ''),null, $request->query->get('sort', 'a.id'), $request->query->get('direction'),true);
+      
         //Here for add your Code //end of your code
 
         return $this->render('/parametres/index.html.twig', [
-            //Here for add your Code //end of your code
-
-            'parametress' => $tabParametress,
-            'pagesMaxi' => $maxi
+            /*¤index_render¤*/
+            'pagination' =>$paginator->paginate($dql,$request->query->getInt('page', 1),8)
         ]);
     }
     //Here for add your Code //end of your code
 
     /* -------------------------------------------------------------------------- */
-    /*                                    ETAT                                    */
+    /*                                    CHAMP                                    */
     /* -------------------------------------------------------------------------- */
     /**
-     * @Route("/etat/{id}/{type}/{valeur}", name="parametres_etat", methods={"GET"})
+     * @Route("/champ/{id}/{type}/{valeur}", name="parametres_champ", methods={"GET"})
      */
-    public function etat(Parametres $parametres, $type = null, $valeur = null): Response
+    public function champ(Parametres $parametres, $type = null, $valeur = null): Response
     {
         //Here for add your Code //end of your code
 
@@ -126,7 +110,7 @@ class ParametresController extends AbstractController
         if (!$parametres) $parametres = new Parametres(); //for new
         //Here for add your Code //end of your code
 
-        $form = $this->createForm(ParametresType::class, $parametres);
+        $form = $this->createForm(ParametresType::class, $parametres,['username'=>$this->getUser()->getEmail(),]);
         //Here for add your Code //end of your code
 
         $form->handleRequest($request);
@@ -156,12 +140,22 @@ class ParametresController extends AbstractController
                                 }
                             }
                         } else {
-                            $fichierName = $fileUploader->upload($fichier, "parametres/$name/");
-                            $function = 'set' . $name;
-                            $parametres->$function($fichierName);
+                           
+                                $fichierName = $fileUploader->upload($fichier, "parametres/$name/");
+                                $function = 'set' . $name;
+                                $parametres->$function($fichierName);
                         }
                         //Here for add your Code //end of your code
 
+                    }
+                    //delete value
+                    else
+                    {
+                         if($request->get("parametres_" . $name)=='à retirer')
+                                {
+                         $function = 'set' . $name;
+                         $parametres->$function('');
+                         }
                     }
                     //Here for add your Code //end of your code
 
@@ -169,8 +163,7 @@ class ParametresController extends AbstractController
             //Here for add your Code //end of your code
 
             //TODO: par listener
-            if ($parametres->getcreatedAt() == 'null') $parametres->setCreatedAt(new DateTime('now'));
-            $parametres->setUpdatedAt(new DateTime('now'));
+            
             $em->persist($parametres);
             $em->flush();
             //Here for add your Code //end of your code
@@ -210,12 +203,8 @@ class ParametresController extends AbstractController
 
         $parametres = clone $parametresc;
         if (property_exists($parametres, 'slug')) {
-            $sfunc = 'set' . ucfirst('');
-            $gfunc = 'get' . ucfirst('');
-            $parametres->$sfunc($parametres->$gfunc() . uniqid());
-            $parametres->setslug();
+            $parametres->setslug($parametresc->getslug().uniqid());
         }
-        $em = $this->getDoctrine()->getManager();
         $parametres->setCreatedAt(new DateTime('now'));
         $em->persist($parametres);
         $em->flush();
@@ -233,7 +222,7 @@ class ParametresController extends AbstractController
     {
         //Here for add your Code //end of your code
 
-        if ($this->isCsrfTokenValid('delete' . $parametres->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $parametres->getId(), $request->request->get('_token')) ) {
             //Here for add your Code //end of your code
 
             if ($request->request->has('delete_delete')) {

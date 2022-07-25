@@ -102,4 +102,19 @@ class CompteRepository extends ServiceEntityRepository implements PasswordUpgrad
             ->getQuery()
             ->getResult();
     }
+
+    public function index($search, $sort = 'a.id', $direction = 'ASC', $deleted = false)
+    {
+        $qb = $this->createQueryBuilder('a');
+        if ($deleted == false) $qb->where($qb->expr()->isNull('a.deletedAt'));
+        else
+            $qb->where($qb->expr()->isNotNull('a.deletedAt'));
+        if ($search) $qb->andwhere($qb->expr()->orX(
+            $qb->expr()->like('a.email', ':val'),
+            $qb->expr()->like('a.nom', ':val')
+        ))->setParameter('val', "%$search%");
+        return $qb->orderBy($sort, $direction)
+            ->getQuery()
+            ->getResult();
+    }
 }
