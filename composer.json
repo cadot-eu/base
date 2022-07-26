@@ -103,7 +103,8 @@
     "symfony/web-profiler-bundle": "6.*",
     "theofidry/psysh-bundle": "^4.5",
     "zenstruck/browser": "^1.1",
-    "zenstruck/foundry": "^1.16"
+    "zenstruck/foundry": "^1.16",
+    "zenstruck/assert":"1.2"
   },
   "config": {
     "optimize-autoloader": true,
