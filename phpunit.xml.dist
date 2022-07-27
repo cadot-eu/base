@@ -30,8 +30,9 @@
     <!-- mock session is enabled by config/packages/test/framework.yaml  -->
     <extensions>
         <!-- for reset db -->
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
         <extension class="Zenstruck\Browser\Test\BrowserExtension" />
+        <extension class="Symfony\Component\Panther\ServerExtension" />
+        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
     </extensions>
 
 </phpunit>
