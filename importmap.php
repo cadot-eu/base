@@ -17,8 +17,6 @@ $baseImportmap = require __DIR__ . '/importmap.base.php';
 
 // Dépendances ajoutées via importmap:require
 $additionalDependencies = [
-// Dépendances ajoutées via importmap:require
-$additionalDependencies = [
     // Les nouvelles dépendances seront ajoutées ici automatiquement
 ];
 

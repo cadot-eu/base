@@ -18,7 +18,7 @@ if [ -f ".ignore" ]; then
     done < .ignore
 fi
 # on ajoutes des fichiers à ignorer d'office
-IGNORED_FILES+=("README.md" "composer.json" "composer.lock")
+IGNORED_FILES+=("README.md" "composer.json" "composer.lock" "importmap.php")
 
 # on copie d'office les fichiers du répertoire templates/dashboard'
 rm -rf templates/dashboard/*
@@ -31,7 +31,7 @@ cp -r ../base/assets/controllers/* assets/controllers
 # on copie le controller DashboardController
 cp ../base/src/Controller/DashboardController.php src/Controller
 cp ../base/assets/styles/dashboard.css assets/styles/dashboard.css
-cp ../base/importmap.php importmap.php
+cp ../base/importmap.base.php importmap.base.php
 
 # Fonction pour vérifier si un fichier doit être ignoré
 should_ignore() {
