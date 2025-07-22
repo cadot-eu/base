@@ -1,6 +1,13 @@
+x-common-opts: &common-opts
+  volumes:
+  - /etc/localtime:/etc/localtime:ro
+  environment:
+  - TZ=Europe/Paris
+
 services:
   DIRECTORY:
-    image: symfonymick-dev_gd-imagick-pdo_pgsql
+    <<: *common-opts
+    image: symfonymick-dev_gd-imagick-pdo_pgsql-sockets-snappy-yaml_python
     container_name: DIRECTORY
     volumes:
       - .:/app
@@ -12,6 +19,7 @@ services:
       - NUMPORT:80
 ###> doctrine/doctrine-bundle ###
   DIRECTORY-db:
+    <<: *common-opts
     container_name: DIRECTORY-db
     image: postgres:16-alpine
     environment:

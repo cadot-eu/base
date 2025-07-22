@@ -13,9 +13,9 @@ services:
     App\:
         resource: "../src/"
         exclude:
-            - "../src/DependencyInjection/"
-            - "../src/Entity/"
-            - "../src/Kernel.php"
+          - "../src/DependencyInjection/"
+          - "../src/Entity/"
+          - "../src/Kernel.php"
 
     App\Service\GetRenderService:
         arguments:
@@ -24,4 +24,9 @@ services:
     app.filter.all_filter:
         class: App\Imagine\Filter\Loader\AllImagineFilter
         tags:
-            - { name: "liip_imagine.filter.loader", loader: "allfilter" }
+          - { name: "liip_imagine.filter.loader", loader: "allfilter" }
+
+    App\Service\DashboardService:
+        arguments:
+            $logger: "@logger"
+            $entityManager: "@doctrine.orm.entity_manager"
