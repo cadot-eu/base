@@ -114,18 +114,23 @@ class DashboardController extends AbstractController
                     $value = array_map(function ($value) use ($enumClass) {
                         return constant($enumClass . '::' . $value);
                     }, $data['value']);
-                } else
+                } else {
                     $value = constant($enumClass . '::' . $data['value']);
+                }
+            }
+            // Toggle boolean if value is not set or is null
+            if ($metadata->getTypeOfField($field) === 'boolean') {
+                    $getter = 'is' . ucfirst($field);
+                    $currentValue = $entityR->$getter();
+                    $value = !$currentValue;
             }
             //si on demande un datetime on convertis le string en datetime
             if (($metadata->getTypeOfField($field) == 'datetime' || $metadata->getTypeOfField($field) == 'date')) {
                 $value == '' ? $value = null : $value = new \DateTime($value);
             }
-
             $entityR->$setter($value);
         }
         $em->persist($entityR);
-
         $em->flush();
 
         return new JsonResponse(['success' => true]);

@@ -1,39 +1,29 @@
 monolog:
     handlers:
-        # Fichier pour DEBUG uniquement
-        debug_only_log:
-            type: filter
-            handler: debug_only_file
-            min_level: debug
-            max_level: debug
-        debug_only_file:
-            type: rotating_file
-            path: "%kernel.logs_dir%/debug.log"
-            level: debug
-            max_files: 1
-            channels: [ "!deprecation" ]
-
-        # Fichier pour INFO uniquement
-        info_only_log:
-            type: filter
-            handler: info_only_file
-            min_level: info
-            max_level: info
-        info_only_file:
+        info_log:
             type: rotating_file
             path: "%kernel.logs_dir%/info.log"
             level: info
-            max_files: 1
             channels: [ "!deprecation" ]
+            formatter: monolog.formatter.line
 
-        # Fichier pour NOTICE, WARNING, ERROR, etc.
-        other_log:
-            type: filter
-            handler: other_file
-            min_level: notice
-        other_file:
+        error_log:
             type: rotating_file
-            path: "%kernel.logs_dir%/other.log"
-            level: notice
-            max_files: 1
+            path: "%kernel.logs_dir%/error.log"
+            level: error
             channels: [ "!deprecation" ]
+            formatter: monolog.formatter.line
+
+        warning_log:
+            type: rotating_file
+            path: "%kernel.logs_dir%/warning.log"
+            level: warning
+            channels: [ "!deprecation" ]
+            formatter: monolog.formatter.line
+
+        debug_log:
+            type: rotating_file
+            path: "%kernel.logs_dir%/debug.log"
+            level: debug
+            channels: [ "!deprecation" ]
+            formatter: monolog.formatter.line

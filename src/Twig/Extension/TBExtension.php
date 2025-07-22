@@ -15,6 +15,14 @@ class TBExtension extends AbstractExtension
             new TwigFunction('dd', [TBExtensionRuntime::class, 'dd']),
             new TwigFunction('is_numeric', [TBExtensionRuntime::class, 'is_numeric']),
             new TwigFunction('ddump', [TBExtensionRuntime::class, 'ddump']),
+            new TwigFunction('value', [TBExtensionRuntime::class, 'value']), // Extract raw value from parameter
         ];
     }
 }
+
+/**
+ * Fonction Twig 'value' :
+ * Utilisation : {{ TBparametres['prix du kwh']|value }}
+ * Retourne la valeur brute (texte) du paramètre, sans HTML.
+ * Compatible array['value'] ou objet->value.
+ */
