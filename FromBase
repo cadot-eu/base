@@ -22,7 +22,9 @@ IGNORED_FILES+=("README.md")
 
 # on copie d'office les fichiers du répertoire templates/dashboard'
 rm -rf templates/dashboard/*
-cp -r ../base/templates/dashboard/* templates/dashboard
+mkdir -p templates/dashboard
+# on copie les fichiers de base
+cp -r ../base/templates/dashboard/* templates/dashboard/.
 # on copie d'office les fichiers de assets/controllers'
 find assets/controllers -maxdepth 1 -type f -delete #pas pas ceus de site
 cp -r ../base/assets/controllers/* assets/controllers
