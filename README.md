@@ -5,6 +5,8 @@ This repository is a modern Symfony project template, ready to use, with an auto
 ## Main Features
 
 - Built-in automatic admin dashboard
+- Simple dashboard configuration: just add a method in your entities
+- Command-line tool to help with dashboard setup and updates
 - Customizable Symfony base
 - Ready-to-develop project structure
 
@@ -16,11 +18,11 @@ The admin dashboard is generated automatically from your entities using the dedi
 php bin/console app:configure-cruds
 ```
 
-This command scans your entities and configures the necessary CRUDs for the admin panel.
+This command scans your entities and configures the necessary CRUDs for the admin panel. It helps you install, update, or reconfigure the dashboard easily.
 
 ### cruds() Method in Your Entities
 
-To customize the dashboard behavior, add a public static `cruds()` method in each entity:
+To customize the dashboard behavior, simply add a public static `cruds()` method in each entity:
 
 ```php
 public static function cruds(): array
@@ -34,7 +36,7 @@ public static function cruds(): array
 }
 ```
 
-No extra configuration is needed: the dashboard adapts automatically.
+No extra configuration is needed: the dashboard adapts automatically to your entities. This makes dashboard setup and maintenance extremely simple.
 
 ## Security and Role Management
 
