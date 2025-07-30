@@ -2,12 +2,16 @@
 
 Ce dépôt est un template de projet Symfony prêt à l'emploi.
 
+## Dépôt du projet
+
+<https://github.com/cadot-eu/base>
+
 ## Utilisation avec Composer
 
 Pour créer un nouveau projet basé sur ce template :
 
 ```bash
-composer create-project votre-vendor/base-project-template nom-du-projet
+composer create-project cadot-eu/base nom-du-projet
 ```
 
 ## Personnalisation
