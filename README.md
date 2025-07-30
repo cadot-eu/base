@@ -1,85 +1,20 @@
-# Symfony Base
+# Base Project Template
 
-Base pour déployer une application symfony webapp avec mini dashboard admin automatique.
-Stimulus & Controller pour modification en directe
+Ce dépôt est un template de projet Symfony prêt à l'emploi.
 
-## Installation
+## Utilisation avec Composer
 
-- `git clone`
-- lancer `./updateFiles.sh` (il va mettre pour vous à jour les fichiers
+Pour créer un nouveau projet basé sur ce template :
 
-## Lancement
-
-- `dc up -d`
-- `caddy run`
-- supprimer le `.git`
-- `git init`
-- modifier `.env.test` (entre '') et `.env.dev` (sans '') en mettant des secrets (différents)
-- `sc d:f:l: -n` pour installer un user `<a@aa.aa>` avec `*` comme admin
-
-## utilisation du Dashboard automatique
-
-- créer une méthode dans une entité `fieldsCrud` qui retourne un tableau de noms en minuscule des **méthodes** à afficher
-- options à la fin du nom:
-- - `*` => la modification est possible
-- - `#` => on limite l'affichage à 10 caractère et on créé un modal avec le texte complet
-
-example:
-
-```php
-public function fieldsCrud(): array
-{
-    return ['tuyaId', 'nom*''];
-}
+```bash
+composer create-project votre-vendor/base-project-template nom-du-projet
 ```
 
-- créer une fontion __toSring pour renvoyer le nom à afficher dans les enfants ... au lieu de l'id
+## Personnalisation
 
-- crééer une méthode `AddButtonsToCrud` qui retourne un tableau de champs de la forme:
-- - texte de l'entité
-- - url: vous pouvet mettre {{ path('') })}}
-- - target: pas obligatoire
-- - icon: pas obligatoire
+- Modifiez les fichiers de configuration selon vos besoins.
+- Consultez la documentation Symfony pour plus d'options.
 
-example:
+## Licence
 
-```php
-public function AddButtonsToCrud(): array
-    {
-        return [
-            'slug' => [
-                'url' => 'http://google.com',
-                'target' => '_blank',
-                'icon' => 'fas fa-globe',
-
-            ]
-        ];
-    }
-```
-
-example:
-
-- créer une méthode `InfoIdCrud` pour afficher une tooltip d'information sur l'id
-
-```php
- public function InfoIdCrud(): array
-    {
-        return [
-            'tuyaId' => $this->getTuyaId(),
-            'nom' => $this->getNom(),
-            'switchCode' => $this->getSwitchCode(),
-            'UUID' => $this->getUuid(),
-            'UID' => $this->getUid(),
-        ];
-    }
-```
-
-## utilisation des scripts de debs
-
-- `dsh`: entrer dans le docker
-- `dlogs`: voir les logs
-
-# labo
-
-# tuyadomotic
-# base
+MIT
