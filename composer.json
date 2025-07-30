@@ -27,5 +27,11 @@
         "branch-alias": {
             "dev-main": "1.0-dev"
         }
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/flex": true,
+            "symfony/runtime": true
+        }
     }
 }

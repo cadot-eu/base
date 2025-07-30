@@ -11,7 +11,7 @@ Ce dépôt est un template de projet Symfony prêt à l'emploi.
 Pour créer un nouveau projet basé sur ce template :
 
 ```bash
-composer create-project cadot-eu/base nom-du-projet
+composer create-project cadot-eu/base nom-du-projet --repository='{"type":"vcs","url":"git@github.com:cadot-eu/base.git"}' dev-main
 ```
 
 ## Personnalisation
