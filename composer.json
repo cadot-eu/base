@@ -1,6 +1,7 @@
 {
     "name": "cadot-eu/base",
     "description": "Template Symfony moderne avec dashboard automatique, prêt à l'emploi, pour démarrer rapidement vos nouveaux projets avec une base solide et personnalisable.",
+    "readme": "README.md",
     "type": "project",
     "license": "MIT",
     "authors": [
