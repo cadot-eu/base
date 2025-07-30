@@ -1,70 +1,71 @@
 # Base Project Template
 
-Ce dépôt est un template de projet Symfony moderne, prêt à l'emploi, avec dashboard automatique pour démarrer rapidement vos nouveaux projets.
+This repository is a modern Symfony project template, ready to use, with an automatic dashboard to quickly start your new projects.
 
-## Fonctionnalités principales
+## Main Features
 
-- Dashboard automatique intégré
-- Base Symfony personnalisable
-- Structure prête pour le développement
+- Built-in automatic admin dashboard
+- Customizable Symfony base
+- Ready-to-develop project structure
 
-## Dashboard automatique et gestion des entités
+## Automatic Dashboard and Entity Management
 
-Le dashboard admin est généré automatiquement à partir de vos entités grâce à la commande dédiée :
+The admin dashboard is generated automatically from your entities using the dedicated command:
 
 ```bash
 php bin/console app:configure-cruds
 ```
 
-Cette commande scanne vos entités et configure automatiquement les CRUDs nécessaires pour l’admin.
+This command scans your entities and configures the necessary CRUDs for the admin panel.
 
-### Méthode cruds() dans vos entités
+### cruds() Method in Your Entities
 
-Pour personnaliser le comportement du dashboard, ajoutez une méthode publique `cruds()` dans chaque entité :
+To customize the dashboard behavior, add a public static `cruds()` method in each entity:
 
 ```php
 public static function cruds(): array
 {
     return [
-        // Exemple :
-        'fields' => ['nom', 'email', 'dateCreation'],
-        'labels' => ['nom' => 'Nom', 'email' => 'E-mail'],
+        // Example:
+        'fields' => ['name', 'email', 'createdAt'],
+        'labels' => ['name' => 'Name', 'email' => 'E-mail'],
         // ...
     ];
 }
 ```
 
-Aucune configuration supplémentaire n’est nécessaire : le dashboard s’adapte automatiquement.
+No extra configuration is needed: the dashboard adapts automatically.
 
-## Sécurité et gestion des rôles
+## Security and Role Management
 
-Les routes du dashboard sont protégées par défaut :
-- `/admin` est accessible uniquement aux utilisateurs ayant le rôle `ROLE_ADMIN`.
-- `/superadmin` (si utilisé) est réservé à `ROLE_SUPERADMIN`.
+Dashboard routes are protected by default:
 
-La configuration de sécurité est déjà prête dans `config/security.yaml` : il suffit d’attribuer les rôles à vos utilisateurs, sans modifier le code ou les routes.
+- `/admin` is accessible only to users with the `ROLE_ADMIN` role.
+- `/superadmin` (if used) is reserved for `ROLE_SUPERADMIN`.
 
-## Création de contrôleurs sécurisés
+The security configuration is already set in `config/security.yaml`: just assign roles to your users, no need to change code or routes.
 
-Pour ajouter un contrôleur d’administration, créez-le simplement avec une route commençant par `/admin` :
+## Creating Secured Controllers
+
+To add an admin controller, simply create it with a route starting with `/admin`:
 
 ```php
-#[Route('/admin/mon-module', name: 'admin_mon_module')]
+#[Route('/admin/my-module', name: 'admin_my_module')]
 ```
 
-Il sera automatiquement protégé par le système de rôles.
+It will automatically be protected by the role system.
 
-## Fixtures pour gagner du temps
+## Fixtures for Fast Prototyping
 
-Des fixtures sont fournies pour pré-remplir la base de données avec des exemples de données et accélérer le développement :
+Fixtures are provided to pre-fill the database with sample data and speed up development:
 
 ```bash
 php bin/console doctrine:fixtures:load
 ```
 
-## Docker et environnement de développement
+## Docker & Development Environment
 
-Le projet utilise une image Docker optimisée, générée automatiquement via [generate_docker_image_symfony](https://github.com/cadot-eu/generate_docker_image_symfony). Le fichier `compose.yaml` est prêt à l’emploi pour lancer l’environnement complet (PHP, PostgreSQL, etc.) :
+The project uses an optimized Docker image, automatically generated via [generate_docker_image_symfony](https://github.com/cadot-eu/generate_docker_image_symfony). The `compose.yaml` file is ready to launch the full environment (PHP, PostgreSQL, etc.):
 
 ```bash
 docker compose up -d
@@ -72,23 +73,23 @@ docker compose up -d
 
 ---
 
-## Dépôt du projet
+## Project Repository
 
 <https://github.com/cadot-eu/base>
 
-## Utilisation avec Composer
+## Usage with Composer
 
-Pour créer un nouveau projet basé sur ce template :
+To create a new project based on this template:
 
 ```bash
-composer create-project cadot-eu/base nom-du-projet --repository='{"type":"vcs","url":"git@github.com:cadot-eu/base.git"}' dev-main
+composer create-project cadot-eu/base your-project-name --repository='{"type":"vcs","url":"git@github.com:cadot-eu/base.git"}' dev-main
 ```
 
-## Personnalisation
+## Customization
 
-- Modifiez les fichiers de configuration selon vos besoins.
-- Consultez la documentation Symfony pour plus d'options.
+- Edit configuration files as needed.
+- See the Symfony documentation for more options.
 
-## Licence
+## License
 
 MIT
