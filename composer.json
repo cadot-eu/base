@@ -1,6 +1,6 @@
 {
-    "name": "votre-vendor/base-project-template",
-    "description": "Template de projet Symfony personnalisable pour démarrage rapide.",
+    "name": "cadot-eu/base",
+    "description": "Template Symfony moderne avec dashboard automatique, prêt à l'emploi, pour démarrer rapidement vos nouveaux projets avec une base solide et personnalisable.",
     "type": "project",
     "license": "MIT",
     "authors": [

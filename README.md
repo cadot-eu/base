@@ -1,6 +1,12 @@
 # Base Project Template
 
-Ce dépôt est un template de projet Symfony prêt à l'emploi.
+Ce dépôt est un template de projet Symfony moderne, prêt à l'emploi, avec dashboard automatique pour démarrer rapidement vos nouveaux projets.
+
+## Fonctionnalités principales
+
+- Dashboard automatique intégré
+- Base Symfony personnalisable
+- Structure prête pour le développement
 
 ## Dépôt du projet
 
