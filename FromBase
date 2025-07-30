@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo 'Maj FromBase from base'
+cp ../base/FromBase .
 # Vérifier si le répertoire ../base existe
 if [ ! -d "../base" ]; then
     echo "Le répertoire ../base n'existe pas."

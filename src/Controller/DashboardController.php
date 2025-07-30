@@ -28,8 +28,12 @@ class DashboardController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, RouterInterface $router,): Response
     {
+        $user = $this->getUser();
+        if (!$user) {
+            return $this->redirectToRoute('app_login'); // ou une autre route de login
+        }
         //on vérifie si la route du role de l'user _index existe
-        $routeIndex = \strtolower(explode('_', $this->getUser()->getRoles()[0])[1]) . '_index';
+        $routeIndex = \strtolower(explode('_', $user->getRoles()[0])[1]) . '_index';
         if ($router->getRouteCollection()->get($routeIndex)) {
             return $this->redirect($this->generateUrl($routeIndex));
         }
@@ -324,18 +328,30 @@ class DashboardController extends AbstractController
 
 
 
-    #[Route('/delete/{entity}/{id}', name: 'delete_entity', methods: ['DELETE'])]
+    #[Route('/delete/{entity}/{id}', name: 'delete_entity', methods: ['DELETE', 'POST','GET'])]
     public function deleteEntity(string $entity, string $id,  EntityManagerInterface $em, Request $request): Response
     {
-        $entityClass = 'App\\Entity\\' . ucfirst($entity);
-        $entity = $em->getRepository($entityClass)->find($id);
-
-        if (!$entity) {
-            $this->addFlash('error', "L'entité $entity n'a pas pu étre trouvée.");
+        // Vérification du token CSRF
+        if ($request->isMethod('POST') && $request->request->get('_method') === 'DELETE') {
+            $token = $request->request->get('_token');
+            if (!$this->isCsrfTokenValid('delete'.$id, $token)) {
+                $this->addFlash('error', 'Token CSRF invalide.');
+                return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('dashboard'), 303);
+            }
         }
 
-        $em->remove($entity);
+        $entityClass = 'App\\Entity\\' . ucfirst($entity);
+        $entityObject = $em->getRepository($entityClass)->find($id);
+
+        if (!$entityObject) {
+            $this->addFlash('error', "L'entité $entity avec l'ID $id n'a pas pu être trouvée.");
+            return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('dashboard'), 303);
+        }
+
+        $em->remove($entityObject);
         $em->flush();
+
+        $this->addFlash('success', "L'entité $entity avec l'ID $id a bien été supprimée.");
 
         return $this->redirect($request->headers->get('referer') ?? $this->generateUrl('dashboard'), 303);
     }
@@ -365,9 +381,21 @@ class DashboardController extends AbstractController
                     $setMethod = 'set' . ucfirst($property->getName());
                     $entityN->$setMethod($entityParentR);
                     //au cas ou pas de persist cascade mis
-                    $inversedBy = lcfirst($attribute->getArguments()['inversedBy']);
-                    $addMethod = 'add' . substr($inversedBy, 0, -1);
-                    $entityParentR->$addMethod($entityN);
+                    $arguments = $attribute->getArguments();
+                    if (isset($arguments['inversedBy'])) {
+                        $inversedBy = $arguments['inversedBy'];
+                        
+                        // Conversion pluriel vers singulier pour le nom de la méthode
+                        $singularForm = $inversedBy;
+                        if (substr($inversedBy, -1) === 's') {
+                            $singularForm = substr($inversedBy, 0, -1);
+                        }
+                        
+                        $addMethod = 'add' . ucfirst($singularForm);
+                        if (method_exists($entityParentR, $addMethod)) {
+                            $entityParentR->$addMethod($entityN);
+                        }
+                    }
                     $this->em->persist($entityParentR);
                     $this->em->flush();
                     $entityParent = $property->getName();
@@ -532,5 +560,249 @@ class DashboardController extends AbstractController
                 'message' => 'Erreur : ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    #[Route('/facture/{factureId}/jour/{jourId}/add', name: 'facture_add_jour', methods: ['POST'])]
+    public function addJourToFacture(int $factureId, int $jourId): JsonResponse
+    {
+        try {
+            $facture = $this->em->getRepository(\App\Entity\Facture::class)->find($factureId);
+            $jour = $this->em->getRepository(\App\Entity\Jour::class)->find($jourId);
+
+            if (!$facture || !$jour) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Facture ou jour introuvable'
+                ], 404);
+            }
+
+            // Vérifier que le jour n'est pas déjà assigné à une autre facture
+            if ($jour->getFacture() && $jour->getFacture() !== $facture) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Ce jour est déjà assigné à une autre facture'
+                ], 400);
+            }
+
+            $jour->setFacture($facture);
+            $facture->addJour($jour);
+            $this->em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Jour ajouté à la facture avec succès'
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur : ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    #[Route('/facture/{factureId}/jour/{jourId}/remove', name: 'facture_remove_jour', methods: ['POST'])]
+    public function removeJourFromFacture(int $factureId, int $jourId): JsonResponse
+    {
+        try {
+            $facture = $this->em->getRepository(\App\Entity\Facture::class)->find($factureId);
+            $jour = $this->em->getRepository(\App\Entity\Jour::class)->find($jourId);
+
+            if (!$facture || !$jour) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Facture ou jour introuvable'
+                ], 404);
+            }
+
+            // Vérifier que le jour appartient bien à cette facture
+            if ($jour->getFacture() !== $facture) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Ce jour n\'appartient pas à cette facture'
+                ], 400);
+            }
+
+            $jour->setFacture(null);
+            $facture->removeJour($jour);
+            $this->em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Jour retiré de la facture avec succès'
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur : ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Méthode générique pour ajouter un élément à une association
+     */
+    #[Route('/add-{field}', name: 'add_association_item', methods: ['POST'])]
+    public function addAssociationItem(string $field, Request $request): JsonResponse
+    {
+        // Vérification du token CSRF
+        if (!$this->isCsrfTokenValid('dynamic-association', $request->request->get('_token'))) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Token CSRF invalide'
+            ], 403);
+        }
+
+        try {
+            $parentId = $request->request->get('parentId');
+            $itemId = $request->request->get('itemId');
+
+            if (!$parentId || !$itemId) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Paramètres manquants'
+                ], 400);
+            }
+
+            // Déterminer les entités basées sur le champ
+            $config = $this->getAssociationConfig($field);
+            if (!$config) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Configuration d\'association introuvable pour le champ: ' . $field
+                ], 400);
+            }
+
+            $parent = $this->em->getRepository($config['parentEntity'])->find($parentId);
+            $item = $this->em->getRepository($config['childEntity'])->find($itemId);
+
+            if (!$parent || !$item) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => ucfirst($config['parentName']) . ' ou ' . $config['childName'] . ' introuvable'
+                ], 404);
+            }
+
+            // Appeler les méthodes d'association
+            if (method_exists($parent, $config['addMethod'])) {
+                $parent->{$config['addMethod']}($item);
+            }
+            
+            if (method_exists($item, $config['setParentMethod'])) {
+                $item->{$config['setParentMethod']}($parent);
+            }
+
+            $this->em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'message' => ucfirst($config['childName']) . ' ajouté(e) avec succès'
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur : ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Méthode générique pour supprimer un élément d'une association
+     */
+    #[Route('/remove-{field}', name: 'remove_association_item', methods: ['POST'])]
+    public function removeAssociationItem(string $field, Request $request): JsonResponse
+    {
+        // Vérification du token CSRF
+        if (!$this->isCsrfTokenValid('dynamic-association', $request->request->get('_token'))) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Token CSRF invalide'
+            ], 403);
+        }
+
+        try {
+            $parentId = $request->request->get('parentId');
+            $itemId = $request->request->get('itemId');
+
+            if (!$parentId || !$itemId) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Paramètres manquants'
+                ], 400);
+            }
+
+            // Déterminer les entités basées sur le champ
+            $config = $this->getAssociationConfig($field);
+            if (!$config) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => 'Configuration d\'association introuvable pour le champ: ' . $field
+                ], 400);
+            }
+
+            $parent = $this->em->getRepository($config['parentEntity'])->find($parentId);
+            $item = $this->em->getRepository($config['childEntity'])->find($itemId);
+
+            if (!$parent || !$item) {
+                return new JsonResponse([
+                    'success' => false,
+                    'message' => ucfirst($config['parentName']) . ' ou ' . $config['childName'] . ' introuvable'
+                ], 404);
+            }
+
+            // Appeler les méthodes de dissociation
+            if (method_exists($parent, $config['removeMethod'])) {
+                $parent->{$config['removeMethod']}($item);
+            }
+            
+            if (method_exists($item, $config['setParentMethod'])) {
+                $item->{$config['setParentMethod']}(null);
+            }
+
+            $this->em->flush();
+
+            return new JsonResponse([
+                'success' => true,
+                'message' => ucfirst($config['childName']) . ' retiré(e) avec succès'
+            ]);
+
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => 'Erreur : ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Configuration des associations pour les méthodes génériques
+     */
+    private function getAssociationConfig(string $field): ?array
+    {
+        $configs = [
+            'jours' => [
+                'parentEntity' => \App\Entity\Facture::class,
+                'childEntity' => \App\Entity\Jour::class,
+                'parentName' => 'facture',
+                'childName' => 'jour',
+                'addMethod' => 'addJour',
+                'removeMethod' => 'removeJour',
+                'setParentMethod' => 'setFacture'
+            ],
+            // Ajoutez d'autres associations ici au besoin
+            // 'lignesDevis' => [
+            //     'parentEntity' => \App\Entity\Devis::class,
+            //     'childEntity' => \App\Entity\LigneDevis::class,
+            //     'parentName' => 'devis',
+            //     'childName' => 'ligne de devis',
+            //     'addMethod' => 'addLigneDevis',
+            //     'removeMethod' => 'removeLigneDevis',
+            //     'setParentMethod' => 'setDevis'
+            // ],
+        ];
+
+        return $configs[$field] ?? null;
     }
 }

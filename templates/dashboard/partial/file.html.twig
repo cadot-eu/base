@@ -11,7 +11,7 @@
 				</a>
 			{% endif %}
 		{% endif %}
-		<a href="#" class="btn btn-sm btn-outline-secondary text-decoration-none" data-controller="uploadFile" data-uploadfile-folder-name-value="{{fieldName}}" data-uploadfile-entity-value="{{app.request.get('entity')}}" data-uploadfile-field-value="{{fieldName}}" data-uploadfile-id-value="{{ligne.id}}" data-action="click->uploadFile#chooseFile" data-turbo="false" data-bs-toggle="tooltip" data-bs-title="Ajouter ou remplacer le fichier">
+		<a href="#" class="btn btn-sm btn-outline-secondary text-decoration-none" data-controller="uploadFile" data-uploadfile-folder-name-value="{{fieldName}}" data-uploadfile-entity-value="{{app.request.get('entity')}}" data-uploadfile-field-value="{{fieldName}}" data-uploadfile-id-value="{{ligne.id}}" data-action="click->uploadFile#chooseFile" data-turbo="false" data-bs-toggle="tooltip" data-bs-title="{{attribute(ligne,fieldName) is not empty ? 'Remplacer le fichier' : 'Ajouter un fichier'}}">
 			<i class="bi bi-upload"></i>
 		</a>
 	</td>

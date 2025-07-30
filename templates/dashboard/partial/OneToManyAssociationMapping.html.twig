@@ -1,16 +1,41 @@
 <td>
-	{% if 'Edition' in field.crud|keys and field.crud.Edition==true %}
-		<a href="{{ path('dashboard_create_child_entity', { entityParent: source, entityParentId: ParentId, entity: target }) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-title="Ajouter un objet <b>{{ target }}</b> descendant du  même <b>{{ source }}</b> " data-turbo="false">
-			<i class="bi bi-plus"></i>
-		</a>
-	{% endif %}
 	{% set value = attribute(ligne, fieldName) %}
 	{% set showTooltip = cruds[fieldName]['affichage'] is defined and cruds[fieldName]['affichage'] == 'join_tooltip' %}
-	{% if value|length %}
-		{{ value|length }}
-		<a href="{{ path('dashboard_list_entities_parent', { parent: source, parentid: ligne.id, entity: target }) }}" class="text-decoration-none" data-turbo="false" data-bs-toggle="tooltip" {% if showTooltip %} data-bs-custom-class="w-50" data-bs-title="{{ value|encode({nokey: true})|e('html_attr') }}" {% else %} data-bs-title="voir les <b>{{ target ~ 's' }}</b> de ce <b>{{ source }}</b>" {% endif %}>
-			<i class="bi bi-arrow-right-circle"></i>
-		</a>
+	{% set showCheckbox = cruds[fieldName]['affichage'] is defined and cruds[fieldName]['affichage'] == 'checkbox' %}
+
+
+	{% if showCheckbox %}
+		{# Affichage checkbox dynamique #}
+		<div data-controller="dynamic-association" data-dynamic-association-parent-id-value="{{ ligne.id }}" data-dynamic-association-field-value="{{ fieldName }}" data-dynamic-association-csrf-token-value="{{ csrf_token('dynamic-association') }}">
+			{% if value|length > 0 %}
+				<div class="{{ fieldName }}-list">
+					{% for item in value %}
+						<div class="form-check form-check-inline mb-1">
+							<input class="form-check-input" type="checkbox" id="{{ fieldName }}_{{ item.id }}" value="{{ item.id }}" checked data-action="change->dynamic-association#toggleItem" data-dynamic-association-target="itemCheckbox">
+							<label class="form-check-label small" for="{{ fieldName }}_{{ item.id }}">
+								{{ item }}
+							</label>
+						</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<span class="text-muted">Aucun
+					{{ fieldName }}</span>
+			{% endif %}
+		</div>
+	{% else %}
+		{% if 'Edition' in field.crud|keys and field.crud.Edition==true %}
+			<a href="{{ path('dashboard_create_child_entity', { entityParent: source, entityParentId: ParentId, entity: target }) }}" class="btn btn-primary btn-sm" data-bs-toggle="tooltip" data-bs-title="Ajouter un objet <b>{{ target }}</b> descendant du  même <b>{{ source }}</b> " data-turbo="false">
+				<i class="bi bi-plus"></i>
+			</a>
+		{% endif %}
+		{# Affichage normal #}
+		{% if value|length %}
+			{{ value|length }}
+			<a href="{{ path('dashboard_list_entities_parent', { parent: source, parentid: ligne.id, entity: target }) }}" class="text-decoration-none" data-turbo="false" data-bs-toggle="tooltip" {% if showTooltip %} data-bs-custom-class="w-50" data-bs-title="{{ value|encode({nokey: true})|e('html_attr') }}" {% else %} data-bs-title="voir les <b>{{ target ~ 's' }}</b> de ce <b>{{ source }}</b>" {% endif %}>
+				<i class="bi bi-arrow-right-circle"></i>
+			</a>
+		{% endif %}
 	{% endif %}
 
 </td>

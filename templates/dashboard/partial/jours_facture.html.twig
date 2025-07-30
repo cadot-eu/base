@@ -1,0 +1,19 @@
+<td data-controller="facture-jours" data-facture-jours-facture-id-value="{{ ligne.id }}">
+	{% if ligne.jours|length > 0 %}
+		<div class="jours-list">
+			{% for jour in ligne.jours %}
+				<div class="form-check form-check-inline mb-1">
+					<input class="form-check-input" type="checkbox" id="jour_{{ jour.id }}" value="{{ jour.id }}" checked data-action="change->facture-jours#toggleJour" data-facture-jours-target="jourCheckbox">
+					<label class="form-check-label small" for="jour_{{ jour.id }}">
+						{{ jour.date ? jour.date|date('d/m') : 'N/A' }}
+						{% if jour.ligneDevis %}
+							<br><small class="text-muted">{{ jour.ligneDevis.intitule|slice(0, 20) }}...</small>
+						{% endif %}
+					</label>
+				</div>
+			{% endfor %}
+		</div>
+	{% else %}
+		<span class="text-muted">Aucun jour</span>
+	{% endif %}
+</td>

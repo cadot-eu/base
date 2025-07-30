@@ -80,23 +80,48 @@
 								{% if type=='ManyToManyInverseSideMapping' %}
 									{% set type = 'ManyToManyOwningSideMapping' %}
 								{% endif %}
-								{{ include('/dashboard/partial/' ~ type ~ '.html.twig', {'fieldName': fieldName, 'field': datas, 'ligne': ligne,'ParentId': ligne.id,'source': datas.source,'target': datas.target,'cruds': cruds}) }}
+
+								{# Vérifier s'il y a un affichage personnalisé dans cruds #}
+								{% if cruds[fieldName] is defined and cruds[fieldName]['affichage'] is defined %}
+									{# Pour les associations OneToMany, utiliser toujours le template principal #}
+									{% if type == 'OneToManyAssociationMapping' %}
+										{{ include('/dashboard/partial/' ~ type ~ '.html.twig', {'fieldName': fieldName, 'field': datas, 'ligne': ligne,'ParentId': ligne.id,'source': datas.source,'target': datas.target,'cruds': cruds}) }}
+									{% else %}
+										{{ include('/dashboard/partial/' ~ fieldName ~ '_' ~ cruds[fieldName]['affichage'] ~ '.html.twig', {'fieldName': fieldName, 'field': datas, 'ligne': ligne,'ParentId': ligne.id,'source': datas.source,'target': datas.target,'cruds': cruds}) }}
+									{% endif %}
+								{% else %}
+									{{ include('/dashboard/partial/' ~ type ~ '.html.twig', {'fieldName': fieldName, 'field': datas, 'ligne': ligne,'ParentId': ligne.id,'source': datas.source,'target': datas.target,'cruds': cruds}) }}
+								{% endif %}
 							{% endif %}
 						{% endfor %}
 						{# les actions en bout de ligne  #}
 						<td>
-							<a href="{{ path('dashboard_delete_entity', {'entity': app.request.get('entity'), 'id': ligne.id })}}" data-turbo-method="delete" data-turbo-confirm="Voulez vous vraiment supprimer cet enregistrement ?" class="btn btn-danger btn-sm">
-								<i class="bi bi-trash"></i>
-							</a>
+							<form action="{{ path('dashboard_delete_entity', {'entity': app.request.get('entity'), 'id': ligne.id })}}" method="post" style="display: inline;">
+								<input type="hidden" name="_method" value="DELETE">
+								<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ligne.id) }}">
+								<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Voulez vous vraiment supprimer cet enregistrement ?')">
+									<i class="bi bi-trash"></i>
+								</button>
+							</form>
 							{% if objets.Actions is defined %}
 								{% for label,bouton in objets.Actions %}
-									<a href="{{ bouton.url|interpolate }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-title="{{ bouton.texte is defined ? bouton.texte : label }}" {{ bouton.target is defined ? 'target="' ~ bouton.target ~ '"' : '' }} {{ bouton.turbo is defined and bouton.turbo == false ? 'data-turbo="false"' : '' }}>
-										{% if bouton.icon is defined and bouton.icon != '' %}
-											<i class="{{ bouton.icon }}"></i>
-										{% else %}
-											{{ label }}
-										{% endif %}
-									</a>
+									{% if bouton.target is defined and bouton.target == 'modal' %}
+										<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal_{{ label }}_{{ ligne.id }}" data-bs-tooltip data-bs-title="{{ bouton.texte is defined ? bouton.texte : label }}">
+											{% if bouton.icon is defined and bouton.icon != '' %}
+												<i class="{{ bouton.icon }}"></i>
+											{% else %}
+												{{ label }}
+											{% endif %}
+										</button>
+									{% else %}
+										<a href="{{ bouton.url|interpolate }}" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-title="{{ bouton.texte is defined ? bouton.texte : label }}" {{ bouton.target is defined ? 'target="' ~ bouton.target ~ '"' : '' }} {{ bouton.turbo is defined and bouton.turbo == false ? 'data-turbo="false"' : '' }}>
+											{% if bouton.icon is defined and bouton.icon != '' %}
+												<i class="{{ bouton.icon }}"></i>
+											{% else %}
+												{{ label }}
+											{% endif %}
+										</a>
+									{% endif %}
 								{% endfor %}
 							{% endif %}
 						</td>
@@ -104,6 +129,36 @@
 				{% endfor %}
 			</tbody>
 		</table>
+
+		{# Génération des modaux pour les actions avec target: modal #}
+		{% if objets.Actions is defined %}
+			{% for ligne in objets_ordre %}
+				{% for label,bouton in objets.Actions %}
+					{% if bouton.target is defined and bouton.target == 'modal' %}
+						<div class="modal fade" id="modal_{{ label }}_{{ ligne.id }}" tabindex="-1" aria-labelledby="modalLabel_{{ label }}_{{ ligne.id }}" aria-hidden="true" data-controller="modal-loader" data-modal-loader-url-value="{{ bouton.url|interpolate }}">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="modalLabel_{{ label }}_{{ ligne.id }}">{{ bouton.texte is defined ? bouton.texte : label }}</h5>
+										<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body" id="modal_body_{{ label }}_{{ ligne.id }}">
+										<div class="d-flex justify-content-center">
+											<div class="spinner-border" role="status">
+												<span class="visually-hidden">Chargement...</span>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+		{% endif %}
 	{% else %}
 		<div class="alert alert-info">Aucun résultat trouvé.</div>
 	{% endif %}

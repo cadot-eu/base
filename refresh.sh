@@ -1,5 +1,12 @@
 while true; do
-    docker exec -it $(basename "$(pwd)") bin/console asset-map:compile
-    inotifywait -e modify,create,delete -r assets
+    # Surveiller tout sauf les dossiers système
+    inotifywait -e modify,create,delete -r . --exclude='\.git|var|vendor|node_modules'
+    echo "Changement détecté à $(date)"
+    sleep 1
+    #docker exec -it $(basename "$(pwd)") php bin/console cache:clear
+    docker exec -it $(basename "$(pwd)") php bin/console asset-map:compile
+    echo "Assets recompilés"
+    sleep 1
+done
     sleep 1
 done
